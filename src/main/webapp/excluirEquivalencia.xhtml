@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8"></meta>
+	<link rel="SHORTCUT ICON" href="img/favicon.ico"></link>
+	<title>Estágios Fatec - Excluir Equivalência</title>
+	<link href="css/style2.css" rel="stylesheet"></link>
+</h:head>
+<h:body>
+	<h:form>
+		<div class="container">
+			<header id="header">
+				<a href="index.xhtml"> <img id="logonovo"
+					src="img/logo.png"></img></a>
+				<div id="restrita">
+					<h:outputLink value="areaAdmin.xhtml">
+						<f:verbatim>Menu</f:verbatim>
+					</h:outputLink>
+				</div>
+				<div id="restrita">
+					<p:commandLink actionListener="#{alunoMB.deslogar}">
+						<h:outputText value="Sair" />
+					</p:commandLink>
+				</div>
+			</header>
+			<section id="pequena">
+				<div id="conteudo3">
+					<h1>Informações sobre equivalência</h1>
+					<h:form id="formBody">
+						<p:messages id="messages" showDetail="true" autoUpdate="true"
+							closable="true" globalOnly="true" for="formBody" />
+						<p:growl id="growl" showDetail="false" sticky="true" />
+						<table id="alter" border="7" cellspacing="20">
+							<tr class="dif">
+								<td><span class="lbl">RA:</span></td>
+								<td><h:inputText value="#{alunoMB.equivalencia.ra}"
+										class="caixaTexto" readonly="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Nome:</span></td>
+								<td><h:inputText value="#{alunoMB.equivalencia.nome}"
+										class="caixaTexto" readonly="true" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">E-mail:</span></td>
+								<td><h:inputText value="#{alunoMB.equivalencia.email}"
+										class="caixaTexto" readonly="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Empresa:</span></td>
+								<td><h:inputText value="#{alunoMB.equivalencia.empresa}"
+										class="caixaTexto" readonly="true" /></td>
+							</tr>
+
+							<tr class="dif">
+								<td><span class="lbl">Deferimento:</span></td>
+								<td><h:commandButton image="#{alunoMB.deferido}"
+										disabled="true" /></td>
+							</tr>
+
+							<tr>
+								<td><span class="lbl">Data do deferimento:</span></td>
+								<td><h:inputText class="caixaTexto"
+										value="#{alunoMB.equivalencia.dataDef}" readonly="true" /></td>
+							</tr>
+
+						</table>
+						<table>
+							<tr>
+								<td><h:commandButton class="botao" value="Excluir"
+										action="#{alunoMB.salvarExcEq}" /></td>
+								<td><h:commandButton class="botao" value="Cancelar"
+										action="#{alunoMB.redirectAdmin}" /></td>
+							</tr>
+						</table>
+					</h:form>
+				</div>
+			</section>
+		</div>
+	</h:form>
+</h:body>
+</html>

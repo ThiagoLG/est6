@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta charset="UTF-8"></meta>
+	<link rel="SHORTCUT ICON" href="img/favicon.ico"></link>
+	<link href="css/style2.css" rel="stylesheet"></link>
+	<title>Estágios Fatec - Consultar Aluno</title>
+</h:head>
+<h:body>
+	<h:form>
+		<div class="container">
+			<header id="header">
+				<a href="index.xhtml"> <img id="logonovo"
+					src="img/logo.png"></img></a>
+				<div id="restrita">
+					<h:outputLink value="areaAdmin.xhtml">
+						<f:verbatim>Menu</f:verbatim>
+					</h:outputLink>
+				</div>
+				<div id="restrita">
+					<p:commandLink actionListener="#{alunoMB.deslogar}" ajax="false">
+						<h:outputText value="Sair" />
+					</p:commandLink>
+				</div>
+			</header>
+			<section id="grande">
+				<div id="conteudoConsulta">
+					<p:messages id="messages" showDetail="true" autoUpdate="true"
+						closable="true" globalOnly="true" for="formBody" />
+					<fieldset>
+						<legend>Consulta</legend>
+						<table>
+							<tr>
+								<td class="etiqueta">RA:</td>
+								<td><h:inputText id="txtRA" value="#{alunoMB.pesqRA}" /></td>
+							</tr>
+							<tr>
+								<td class="etiqueta">Nome:</td>
+								<td><h:inputText id="txtNome" value="#{alunoMB.pesqNome}" /></td>
+							</tr>
+							<tr>
+								<td><h:commandButton class="botao" value="Pesquisar RA"
+										action="#{alunoMB.pesquisarRA}" /></td>
+								<td><h:commandButton class="botao" value="Pesquisar Nome"
+										action="#{alunoMB.pesquisarNome}" /></td>
+							</tr>
+						</table>
+					</fieldset>
+
+					<h:form>
+
+						<center>
+							<h1>ESTÁGIOS</h1>
+						</center>
+
+						<p:dataTable value="#{alunoMB.lstAlunos}" var="aluno"
+							scrollable="true" scrollHeight="225">
+
+							<p:column headerText="RA">
+								<h:outputText value="#{aluno.ra}" />
+							</p:column>
+
+
+							<p:column headerText="Nome">
+								<h:outputText value="#{aluno.nome}" />
+							</p:column>
+
+							<p:column headerText="Email">
+								<h:outputText value="#{aluno.email}" />
+							</p:column>
+
+							<p:column headerText="Editar">
+								<h:commandButton image="img/edit.png"
+									action="#{alunoMB.editarAluno (aluno)}" />
+							</p:column>
+
+							<p:column headerText="Excluir">
+								<h:commandButton image="img/lixeira.png"
+									action="#{alunoMB.excluirAluno (aluno)}" />
+							</p:column>
+
+							<p:column headerText="Visualizar">
+								<h:commandButton image="img/visu.png"
+									action="#{alunoMB.visualizarAluno (aluno)}" />
+							</p:column>
+
+						</p:dataTable>
+
+						<center>
+							<h1>EQUIVALÊNCIAS</h1>
+						</center>
+
+						<p:dataTable value="#{alunoMB.lstEquivalencia}" var="equivalencia"
+							scrollable="true" scrollHeight="225">
+
+							<p:column headerText="RA">
+								<h:outputText value="#{equivalencia.ra}" />
+							</p:column>
+
+
+							<p:column headerText="Nome">
+								<h:outputText value="#{equivalencia.nome}" />
+							</p:column>
+
+							<p:column headerText="Email">
+								<h:outputText value="#{equivalencia.email}" />
+							</p:column>
+
+							<p:column headerText="Editar">
+								<h:commandButton image="img/edit.png"
+									action="#{alunoMB.editarEquivalencia (equivalencia)}" />
+							</p:column>
+
+							<p:column headerText="Excluir">
+								<h:commandButton image="img/lixeira.png"
+									action="#{alunoMB.excluirEquivalencia (equivalencia)}" />
+							</p:column>
+
+							<p:column headerText="Visualizar">
+								<h:commandButton image="img/visu.png"
+									action="#{alunoMB.visualizarEquivalencia (equivalencia)}" />
+							</p:column>
+
+						</p:dataTable>
+
+					</h:form>
+				</div>
+			</section>
+		</div>
+	</h:form>
+</h:body>
+</html>

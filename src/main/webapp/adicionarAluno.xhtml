@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8"></meta>
+	<link rel="SHORTCUT ICON" href="img/favicon.ico"></link>
+	<title>Estágios Fatec - Adicionar Aluno</title>
+	<link href="css/style2.css" rel="stylesheet"></link>
+</h:head>
+<h:body>
+	<script>
+		PrimeFaces.locales['pt'] = {
+			closeText : 'Fechar',
+			prevText : 'Anterior',
+			nextText : 'Próximo',
+			currentText : 'Começo',
+			monthNames : [ 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio',
+					'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro',
+					'Novembro', 'Dezembro' ],
+			monthNamesShort : [ 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+					'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez' ],
+			dayNames : [ 'Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta',
+					'Sexta', 'Sábado' ],
+			dayNamesShort : [ 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb' ],
+			dayNamesMin : [ 'D', 'S', 'T', 'Q', 'Q', 'S', 'S' ],
+			weekHeader : 'Semana',
+			firstDay : 0,
+			isRTL : false,
+			showMonthAfterYear : false,
+			yearSuffix : '',
+			timeOnlyTitle : 'Só Horas',
+			timeText : 'Tempo',
+			hourText : 'Hora',
+			minuteText : 'Minuto',
+			secondText : 'Segundo',
+			ampm : false,
+			month : 'Mês',
+			week : 'Semana',
+			day : 'Dia',
+			allDayText : 'Todo o Dia'
+		};
+	</script>
+	<h:form>
+		<div class="container">
+			<header id="header">
+				<a href="index.xhtml"> <img id="logonovo"
+					src="img/logo.png"></img></a>
+				<div id="restrita">
+					<h:outputLink value="areaAdmin.xhtml">
+						<f:verbatim>Menu</f:verbatim>
+					</h:outputLink>
+				</div>
+				<div id="restrita">
+					<p:commandLink actionListener="#{alunoMB.deslogar}">
+						<h:outputText value="Sair" />
+					</p:commandLink>
+				</div>
+			</header>
+			<section id="pequeno">
+				<div id="conteudo3">
+					<h1>Informações sobre o estágio</h1>
+					<h:form id="formBody">
+						<p:messages id="messages" showDetail="true" autoUpdate="true"
+							closable="true" globalOnly="false" />
+						<table id="alter" border="7" cellspacing="20">
+							<tr>
+								<td><span class="lbl">Curso:</span></td>
+
+								<td><h:selectOneMenu class="caixaTexto" id="cbbCursos"
+										value="#{alunoMB.curso.id_curso}" required="true"
+										style="comboBox">
+										<f:selectItems value="#{alunoMB.lstCursos}" var="curso"
+											itemValue="#{curso.id_curso}" itemLabel="#{curso.descricao}" />
+
+									</h:selectOneMenu></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">RA:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.ra}"
+										class="caixaTexto" required="true"
+										requiredMessage="O campo RA é obrigatório!" size="120" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Nome:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.nome}"
+										class="caixaTexto" required="true"
+										requiredMessage="O campo NOME é obrigatório!" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">E-mail:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.email}"
+										class="caixaTexto" required="true"
+										requiredMessage="O campo E-MAIL é obrigatório!" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Empresa:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.empresa}"
+										class="caixaTexto" required="true"
+										requiredMessage="O campo EMPRESA é obrigatório!" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Início:</span></td>
+								<td><p:calendar showOn="button" navigator="true" size="15"
+										value="#{alunoMB.aluno.inicio}" pattern="dd/MM/yyyy"
+										mask="99/99/9999" locale="pt" required="true"
+										requiredMessage="O campo INÍCIO é obrigatório!">
+										<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+											timeZone="America/Sao_Paulo" />
+									</p:calendar></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Término:</span></td>
+								<td><p:calendar showOn="button" navigator="true" size="15"
+										value="#{alunoMB.aluno.termino}" pattern="dd/MM/yyyy"
+										mask="99/99/9999" locale="pt" required="true"
+										requiredMessage="O campo TÉRMINO é obrigatório!">
+										<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+											timeZone="America/Sao_Paulo" />
+									</p:calendar></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Estágio Obrigatório:</span></td>
+								<td><p:selectBooleanCheckbox value="#{alunoMB.aluno.obg}" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Carga Horária Semanal:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.cargaHoraria}"
+										class="caixaTexto" required="true"
+										requiredMessage="O campo CARGA HORÁRIA é obrigatório!" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Termo de Compromisso:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.termoCompromisso}" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Plano de atividade:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.planoAtividade}" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Relatório 1:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.relatorio1}" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Relatório 2:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.relatorio2}" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Relatório 3:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.relatorio3}" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Relatório 4:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.relatorio4}" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Termo aditivo:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.termoAditivo}" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Avaliação do aluno:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.avAluno}" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Avaliação da empresa:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.avEmpresa}" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Termo de recisão:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.termoRecisao}" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Termo de realização:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.termoRealizacao}" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Termo de contrato assinado:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.termoContrato}" /></td>
+							</tr>
+
+						</table>
+						<table>
+							<tr>
+								<td><h:commandButton class="botao" value="Cadastrar"
+										action="#{alunoMB.adicionar}" /></td>
+								<td><h:commandButton class="botao" value="Limpar"
+										action="#{alunoMB.limpar}" /></td>
+							</tr>
+						</table>
+					</h:form>
+				</div>
+			</section>
+		</div>
+	</h:form>
+</h:body>
+</html>

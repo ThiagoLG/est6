@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8"></meta>
+	<link rel="SHORTCUT ICON" href="img/favicon.ico"></link>
+	<title>Estágios Fatec - Editar Equivalência</title>
+	<link href="css/style2.css" rel="stylesheet"></link>
+</h:head>
+<h:body>
+	<h:form>
+		<div class="container">
+			<header id="header">
+				<a href="index.xhtml"> <img id="logonovo"
+					src="img/logo.png"></img></a>
+				<div id="restrita">
+					<h:outputLink value="areaAdmin.xhtml">
+						<f:verbatim>Menu</f:verbatim>
+					</h:outputLink>
+				</div>
+				<div id="restrita">
+					<p:commandLink actionListener="#{alunoMB.deslogar}">
+						<h:outputText value="Sair" />
+					</p:commandLink>
+				</div>
+			</header>
+			<section id="pequeno">
+				<div id="conteudo3">
+					<h1>Informações sobre equivalência</h1>
+					<h:form id="formBody">
+						<p:messages id="messages" showDetail="true" autoUpdate="true"
+							closable="true" globalOnly="true" for="formBody" />
+						<table id="alter" border="7" cellspacing="20">
+							<tr>
+								<td><span class="lbl">Curso:</span></td>
+
+								<td><h:selectOneMenu class="caixaTexto" id="cbbCursos"
+										value="#{alunoMB.curso.id_curso}" required="true"
+										style="comboBox">
+										<f:selectItems value="#{alunoMB.lstCursos}" var="curso"
+											itemValue="#{curso.id_curso}" itemLabel="#{curso.descricao}" />
+
+									</h:selectOneMenu></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">RA:</span></td>
+								<td><h:inputText value="#{alunoMB.equivalencia.ra}"
+										class="caixaTexto" disable="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Nome:</span></td>
+								<td><h:inputText value="#{alunoMB.equivalencia.nome}"
+										class="caixaTexto" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">E-mail:</span></td>
+								<td><h:inputText value="#{alunoMB.equivalencia.email}"
+										class="caixaTexto" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Empresa:</span></td>
+								<td><h:inputText value="#{alunoMB.equivalencia.empresa}"
+										class="caixaTexto" /></td>
+							</tr>
+
+							<tr class="dif">
+								<td><span class="lbl">Deferido:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.equivalencia.deferido}" /></td>
+							</tr>
+
+							<tr class="dif">
+								<td><span class="lbl">Data de Deferimento:</span></td>
+								<td><p:calendar showOn="button" navigator="true" size="15"
+										requiredMessage="Campo Obrigatorio"
+										value="#{alunoMB.equivalencia.dtDeferimento}" pattern="dd/MM/yyyy"
+										mask="99/99/9999" locale="pt">
+										<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+											timeZone="America/Sao_Paulo" />
+									</p:calendar></td>
+							</tr>
+						</table>
+						<table>
+							<tr>
+								<td><h:commandButton class="botao" value="Salvar"
+										action="#{alunoMB.salvarEditEq}" /></td>
+								<td><h:commandButton class="botao" value="Cancelar"
+										action="#{alunoMB.redirectAdmin}" /></td>
+							</tr>
+						</table>
+					</h:form>
+				</div>
+			</section>
+		</div>
+	</h:form>
+</h:body>
+</html>

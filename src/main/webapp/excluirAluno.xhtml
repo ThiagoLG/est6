@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8"></meta>
+	<link rel="SHORTCUT ICON" href="img/favicon.ico"></link>
+	<title>Estágios Fatec - Excluir Estágio</title>
+	<link href="css/style2.css" rel="stylesheet"></link>
+</h:head>
+<h:body>
+	<h:form>
+		<div class="container">
+			<header id="header">
+				<a href="index.xhtml"> <img id="logonovo"
+					src="img/logo.png"></img></a>
+				<div id="restrita">
+					<h:outputLink value="areaAdmin.xhtml">
+						<f:verbatim>Menu</f:verbatim>
+					</h:outputLink>
+				</div>
+				<div id="restrita">
+					<p:commandLink actionListener="#{alunoMB.deslogar}">
+						<h:outputText value="Sair" />
+					</p:commandLink>
+				</div>
+			</header>
+			<section id="dadosAlunos">
+				<div id="conteudo3">
+					<h1>Informações sobre estagiário(a)</h1>
+					<h:form id="formBody">
+						<p:messages id="messages" showDetail="true" autoUpdate="true"
+							closable="true" globalOnly="true" for="formBody" />
+						<p:growl id="growl" showDetail="false" sticky="true" />
+						<table id="alter" border="7" cellspacing="20">
+							<tr class="dif">
+								<td><span class="lbl">RA:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.ra}"
+										class="caixaTexto" readonly="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Nome:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.nome}"
+										class="caixaTexto" readonly="true" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">E-mail:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.email}"
+										class="caixaTexto" readonly="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Empresa:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.empresa}"
+										class="caixaTexto" readonly="true" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Inicio:</span></td>
+								<td><h:inputText class="caixaTexto"
+										value="#{alunoMB.aluno.dtIni}" readonly="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Término:</span></td>
+								<td><h:inputText class="caixaTexto"
+										value="#{alunoMB.aluno.dtTer}" readonly="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Estágio Obrigatório:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.obrigatorio}"
+										class="caixaTexto" readonly="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Carga Horária Semanal:</span></td>
+								<td><h:inputText value="#{alunoMB.aluno.cargaHoraria}"
+										class="caixaTexto" readonly="true" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Termo de Compromisso:</span></td>
+								<td><h:commandButton image="#{alunoMB.termoCompromisso}"
+										disabled="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Plano de atividade:</span></td>
+								<td><h:commandButton image="#{alunoMB.planoAtividade}"
+										disabled="true" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Relatório 1:</span></td>
+								<td><h:commandButton image="#{alunoMB.relatorio1}"
+										disabled="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Relatório 2:</span></td>
+								<td><h:commandButton image="#{alunoMB.relatorio2}"
+										disabled="true" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Relatório 3:</span></td>
+								<td><h:commandButton image="#{alunoMB.relatorio3}"
+										disabled="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Relatório 4:</span></td>
+								<td><h:commandButton image="#{alunoMB.relatorio4}"
+										disabled="true" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Termo aditivo:</span></td>
+								<td><h:commandButton image="#{alunoMB.termoAditivo}"
+										disabled="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Avaliação do aluno:</span></td>
+								<td><h:commandButton image="#{alunoMB.avAluno}"
+										disabled="true" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Avaliação da empresa:</span></td>
+								<td><h:commandButton image="#{alunoMB.avEmpresa}"
+										disabled="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Termo de recisão:</span></td>
+								<td><h:commandButton image="#{alunoMB.termoRecisao}"
+										disabled="true" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Termo de realização:</span></td>
+								<td><h:commandButton image="#{alunoMB.termoRealizacao}"
+										disabled="true" /></td>
+							</tr>
+							<tr>
+								<td><span class="lbl">Termo de contrato assinado:</span></td>
+								<td><h:commandButton image="#{alunoMB.termoContrato}"
+										disabled="true" /></td>
+							</tr>
+
+						</table>
+						<table>
+							<tr>
+								<td><h:commandButton class="botao" value="Excluir"
+										action="#{alunoMB.salvarExc}" /></td>
+								<td><h:commandButton class="botao" value="Cancelar"
+										action="#{alunoMB.redirectAdmin}" /></td>
+							</tr>
+						</table>
+					</h:form>
+				</div>
+			</section>
+		</div>
+	</h:form>
+</h:body>
+</html>
