@@ -19,25 +19,19 @@
 			<section id="pequena">
 				<div id="conteudo">
 					<fieldset>
-						<legend>Login</legend>
+						<legend>Acesso</legend>
 						<table>
 							<tr>
 								<td class="etiqueta">RA:</td>
 								<td><h:inputText id="txtUsuario"
 										value="#{alunoMB.aluno.ra}" /></td>
 							</tr>
-							<tr>
-								<td class="etiqueta">Senha:</td>
-								<td><h:inputSecret id="txtSenha"
-										value="#{alunoMB.aluno.senha}" /></td>
-							</tr>
-							<tr>
-								<td></td>
-								<td><h:commandButton class="botao" id="botaoUnicoLogin"
-										value="Logar" action="#{alunoMB.logar}" /></td>
-							</tr>
-
 						</table>
+						<p></p>
+						<center>
+							<h:commandButton class="botao" id="botaoUnicoLogin" value="Consultar"
+								action="#{alunoMB.logar}" />
+						</center>
 						<p:messages id="messages" showSummary="true" showDetail="true"
 							toolTip="true" infoStyle="color:blue;" layoult="table"
 							for="formBody" />

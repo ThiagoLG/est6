@@ -97,6 +97,7 @@ public class AlunoMB {
 		String pagina = "";
 		ILoginDao loginDao = new LoginDao();
 		IAdminDao adminDao = new AdminDao();
+		aluno.setSenha("123");
 
 		if (adminDao.autenticarLogin(administrador.getUsuario(), administrador.getSenha())) {
 			System.out.println("logou admin");
@@ -145,12 +146,14 @@ public class AlunoMB {
 			}
 
 		} else {
-			System.out.println("nao logou ninguem e a p�gina �: " + pagina + "!");
+			System.out.println("não logou ninguem e a página é: " + pagina + "!");
 			logado = false;
 			FacesContext fc = FacesContext.getCurrentInstance();
-			fc.addMessage("formBody",
-					new FacesMessage(FacesMessage.SEVERITY_FATAL, "Falha de autentica��o!", "RA ou senha incorretos!"));
+			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_FATAL,
+					"Não foi possível realizar consulta!", "RA inválido ou não cadastrado!"));
 			// fc.addMessage("formBody:txtSenha", new
+			fc.addMessage("formAdm", new FacesMessage(FacesMessage.SEVERITY_FATAL, "Usuário ou senha incorretos!", ""));
+
 			// FacesMessage(FacesMessage.SEVERITY_WARN,"",""));
 
 		}
@@ -172,26 +175,26 @@ public class AlunoMB {
 
 		if (validarDados()) {
 			if (alunoDao.estagioAtivo(aluno.getRa())) {
-				
+
 				FacesContext fc = FacesContext.getCurrentInstance();
 				fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_WARN,
-						"N�o foi poss�vel registrar o aluno", "� permitido somente um registro de est�gio ativo!"));
+						"Não foi possível registrar o aluno", "É permitido somente um registro de estágio ativo!"));
 
 			} else {
 
 				if (alunoDao.adicionar(aluno)) {
-				
+
 					FacesContext fc = FacesContext.getCurrentInstance();
 					fc.addMessage("formBody",
 							new FacesMessage(FacesMessage.SEVERITY_INFO, "Aluno registrado com sucesso!", ""));
 					limpar();
-					
+
 				} else {
-					
+
 					FacesContext fc = FacesContext.getCurrentInstance();
 					fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_FATAL,
 							"Falha ao registrar o aluno", "Verifique os campos e tente novamente"));
-					
+
 				}
 			}
 		}
@@ -330,8 +333,8 @@ public class AlunoMB {
 	}
 
 	public void pesquisarRA() throws SQLException {
-//		lstAlunos.clear();
-//		lstEquivalencia.clear();
+		// lstAlunos.clear();
+		// lstEquivalencia.clear();
 		lstAlunos = alunoDao.pesquisarRa(pesqRA);
 		lstEquivalencia = alunoDao.pesquisarRaEq(pesqRA);
 
@@ -342,8 +345,8 @@ public class AlunoMB {
 		// FacesMessage(FacesMessage.SEVERITY_WARN, "Nenhum aluno encontrado",
 		// "Confira o RA e tente novamente"));
 		// }
-//		lstAlunos.add(aluno);
-//		lstEquivalencia.add(equivalencia);
+		// lstAlunos.add(aluno);
+		// lstEquivalencia.add(equivalencia);
 
 		if (lstEquivalencia.isEmpty() && lstAlunos.isEmpty()) {
 			FacesContext fc = FacesContext.getCurrentInstance();
@@ -409,7 +412,7 @@ public class AlunoMB {
 			} else {
 				FacesContext fc = FacesContext.getCurrentInstance();
 				fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_WARN,
-						"N�o foi poss�vel atualizar as informa��es!", "Confira os dados e tente novamente."));
+						"Não foi possível atualizar as informações!", "Confira os dados e tente novamente."));
 			}
 		}
 		return pagina;
@@ -429,7 +432,7 @@ public class AlunoMB {
 			} else {
 				FacesContext fc = FacesContext.getCurrentInstance();
 				fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_WARN,
-						"N�o foi poss�vel atualizar as informa��es!", "Confira os dados e tente novamente."));
+						"Não foi poss�vel atualizar as informações!", "Confira os dados e tente novamente."));
 			}
 		}
 		return pagina;
@@ -568,7 +571,7 @@ public class AlunoMB {
 			if (inicio.after(termino)) {
 				ok = false;
 				fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_FATAL,
-						"N�o foi poss�vel registrar o aluno!", "Data de t�rmino deve ser posterior a date de in�cio"));
+						"Não foi possível registrar o aluno!", "Data de término deve ser posterior a date de início"));
 			}
 
 		} catch (ParseException e) {
@@ -581,7 +584,7 @@ public class AlunoMB {
 		} catch (Exception e) {
 			ok = false;
 			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_FATAL,
-					"N�o foi poss�vel registrar o aluno!", "RA deve conter apenas n�meros"));
+					"Não foi possível registrar o aluno!", "RA deve conter apenas números"));
 		}
 
 		// VALIDAR NOME
@@ -602,19 +605,19 @@ public class AlunoMB {
 			if (aluno.getCargaHoraria() == 0) {
 				ok = false;
 				fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_FATAL,
-						"N�o foi poss�vel registrar o aluno!", "Carga Hor�ria n�o pode ser igual a zero"));
+						"Não foi poss�vel registrar o aluno!", "Carga Horária não pode ser igual a zero"));
 			}
 		} catch (Exception e) {
 			ok = false;
 			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_FATAL,
-					"N�o foi poss�vel registrar o aluno!", "Carga Hor�ria deve conter apenas n�meros"));
+					"Não foi possível registrar o aluno!", "Carga Horária deve conter apenas números"));
 		}
 
 		// VALIDAR EMAIL
 		if (!aluno.getEmail().contains("@")) {
 			ok = false;
 			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_FATAL,
-					"N�o foi poss�vel registrar o aluno!", "E-mail inv�lido"));
+					"Não foi possível registrar o aluno!", "E-mail inválido"));
 		}
 
 		return ok;
@@ -640,7 +643,7 @@ public class AlunoMB {
 			if (dataEq.after(hoje)) {
 				ok = false;
 				fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_FATAL,
-						"N�o foi poss�vel registrar o aluno!", "Equival�ncia n�o pode ter uma data futura"));
+						"Não foi possível registrar o aluno!", "Equival�ncia não pode ter uma data futura"));
 			}
 
 		} catch (ParseException e) {
@@ -653,14 +656,14 @@ public class AlunoMB {
 		} catch (Exception e) {
 			ok = false;
 			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_FATAL,
-					"N�o foi poss�vel registrar o aluno!", "RA deve conter apenas n�meros"));
+					"Não foi possível registrar o aluno!", "RA deve conter apenas números"));
 		}
 
 		// VALIDAR EMAIL
 		if (!equivalencia.getEmail().contains("@")) {
 			ok = false;
 			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_FATAL,
-					"N�o foi poss�vel registrar o aluno!", "E-mail inv�lido"));
+					"Não foi possível registrar o aluno!", "E-mail inválido"));
 		}
 
 		return ok;
