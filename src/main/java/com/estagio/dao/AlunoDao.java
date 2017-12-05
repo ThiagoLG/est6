@@ -284,7 +284,7 @@ public class AlunoDao implements IAlunoDao {
 	@Override
 	public boolean excluir(int id_al) throws SQLException {
 		boolean exc = false;
-		String sql = "update infoAlunos set ativo = false where id = ?";
+		String sql = "update infoAlunos set ativo = false where id_al = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
 
@@ -589,7 +589,7 @@ public class AlunoDao implements IAlunoDao {
 	@Override
 	public boolean editarEq(Equivalencia eq) throws SQLException {
 		boolean alt = false;
-		String sql = "update infoAlunosEq set ra = ?, nome = ?, email = ?, empresa = ?, id_curso = ?, deferido = ?, dtDeferimento = ? where id = ?";
+		String sql = "update infoAlunosEq set ra = ?, nome = ?, email = ?, empresa = ?, id_curso = ?, deferido = ?, dtDeferimento = ? where id_eq = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
 
