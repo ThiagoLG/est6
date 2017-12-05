@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.estagio.model.Aluno;
@@ -56,7 +55,7 @@ public class AlunoDao implements IAlunoDao {
 			if (a.isObg()) {
 				ps.setString(22, "Sim");
 			} else {
-				ps.setString(22, "N�o");
+				ps.setString(22, "Nao");
 			}
 
 			ps.setInt(23, a.getCargaHoraria());
@@ -97,6 +96,7 @@ public class AlunoDao implements IAlunoDao {
 
 			while (rs.next()) {
 				Aluno a = new Aluno();
+				a.setId_al(rs.getInt("id_al"));
 				a.setRa(rs.getString("ra"));
 				a.setNome(rs.getString("nome"));
 				a.setEmail(rs.getString("email"));
@@ -155,7 +155,7 @@ public class AlunoDao implements IAlunoDao {
 		ResultSet rs = null;
 		Aluno a = new Aluno();
 
-		String sql = "SELECT *, date_add(inicio, interval 182 day) as rel1, date_add(inicio, interval 365 day) as rel2, date_add(inicio, interval 547 day) as rel3, date_add(inicio, interval 730 day) as rel4 from infoAlunos where ra = ? and senha like ? and ativo=true order by inicio desc";
+		String sql = "SELECT *, date_add(inicio, interval 182 day) as rel1, date_add(inicio, interval 365 day) as rel2, date_add(inicio, interval 547 day) as rel3, date_add(inicio, interval 730 day) as rel4 from infoAlunos where ra = ? and senha like ? and ativo = true order by inicio desc";
 
 		try {
 
@@ -170,6 +170,7 @@ public class AlunoDao implements IAlunoDao {
 
 			if (rs.next()) {
 				System.out.println("achou alguma coisa");
+				a.setId_al(rs.getInt("id_al"));
 				a.setRa(rs.getString("ra"));
 				a.setNome(rs.getString("nome"));
 				a.setEmail(rs.getString("email"));
@@ -223,47 +224,50 @@ public class AlunoDao implements IAlunoDao {
 	@Override
 	public boolean editar(Aluno a) throws SQLException {
 		boolean alt = false;
-		String sql = "update infoAlunos set nome = ?, email = ?, empresa = ?, id_curso = ?, inicio = ?, termino = ?, termoCompromisso = ?, planoAtividade = ?, relatorio1 = ?, relatorio2 = ?, relatorio3 = ?, relatorio4 = ?, termoAditivo = ?, avAluno = ?, avEmpresa = ?, termoRecisao = ?, termoRealizacao = ?, termoContrato = ?, obrigatorio = ?, cargaHoraria = ? where ra like ? and inicio like ?";
+		String sql = "update infoAlunos set ra = ?, nome = ?, email = ?, empresa = ?, id_curso = ?, inicio = ?, termino = ?, termoCompromisso = ?,"
+				+ " planoAtividade = ?, relatorio1 = ?, relatorio2 = ?, relatorio3 = ?, relatorio4 = ?, termoAditivo = ?, avAluno = ?, avEmpresa = ?,"
+				+ " termoRecisao = ?, termoRealizacao = ?, termoContrato = ?, obrigatorio = ?, cargaHoraria = ? where id_al = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
 			con = DBResourceManager.getInstance().getCon();
 			ps = con.prepareStatement(sql);
-			ps.setString(1, a.getNome());
-			ps.setString(2, a.getEmail());
-			ps.setString(3, a.getEmpresa());
-			ps.setInt(4, a.getId_curso());
+			ps.setString(1, a.getRa());
+			ps.setString(2, a.getNome());
+			ps.setString(3, a.getEmail());
+			ps.setString(4, a.getEmpresa());
+			ps.setInt(5, a.getId_curso());
 			java.sql.Date inicio = new java.sql.Date(a.getInicio().getTime());
-			ps.setDate(5, inicio);
+			ps.setDate(6, inicio);
 			java.sql.Date termino = new java.sql.Date(a.getTermino().getTime());
-			ps.setDate(6, termino);
-			ps.setBoolean(7, a.isTermoCompromisso());
-			ps.setBoolean(8, a.isPlanoAtividade());
-			ps.setBoolean(9, a.isRelatorio1());
-			ps.setBoolean(10, a.isRelatorio2());
-			ps.setBoolean(11, a.isRelatorio3());
-			ps.setBoolean(12, a.isRelatorio4());
-			ps.setBoolean(13, a.isTermoAditivo());
-			ps.setBoolean(14, a.isAvAluno());
-			ps.setBoolean(15, a.isAvEmpresa());
-			ps.setBoolean(16, a.isTermoRecisao());
-			ps.setBoolean(17, a.isTermoRealizacao());
-			ps.setBoolean(18, a.isTermoContrato());
+			ps.setDate(7, termino);
+			ps.setBoolean(8, a.isTermoCompromisso());
+			ps.setBoolean(9, a.isPlanoAtividade());
+			ps.setBoolean(10, a.isRelatorio1());
+			ps.setBoolean(11, a.isRelatorio2());
+			ps.setBoolean(12, a.isRelatorio3());
+			ps.setBoolean(13, a.isRelatorio4());
+			ps.setBoolean(14, a.isTermoAditivo());
+			ps.setBoolean(15, a.isAvAluno());
+			ps.setBoolean(16, a.isAvEmpresa());
+			ps.setBoolean(17, a.isTermoRecisao());
+			ps.setBoolean(18, a.isTermoRealizacao());
+			ps.setBoolean(19, a.isTermoContrato());
 
 			if (a.isObg()) {
-				ps.setString(19, "Sim");
+				ps.setString(20, "Sim");
 			} else {
-				ps.setString(19, "N�o");
+				ps.setString(20, "Nao");
 			}
 
-			ps.setInt(20, a.getCargaHoraria());
-			ps.setString(21, a.getRa());
+			ps.setInt(21, a.getCargaHoraria());
+			ps.setInt(22, a.getId_al());
 
-			Date d = sdf.parse(a.getDtIni());
-			java.sql.Date dtIni = new java.sql.Date(d.getTime());
-			ps.setDate(22, dtIni);
+//			Date d = sdf.parse(a.getDtIni());
+//			java.sql.Date dtIni = new java.sql.Date(d.getTime());
+//			ps.setDate(22, dtIni);
 
 			ps.executeUpdate();
 
@@ -278,9 +282,9 @@ public class AlunoDao implements IAlunoDao {
 	}
 
 	@Override
-	public boolean excluir(String ra, Date inicio) throws SQLException {
+	public boolean excluir(int id_al) throws SQLException {
 		boolean exc = false;
-		String sql = "update infoAlunos set ativo = false where ra like ? and inicio like ?";
+		String sql = "update infoAlunos set ativo = false where id = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
 
@@ -288,11 +292,10 @@ public class AlunoDao implements IAlunoDao {
 			con = DBResourceManager.getInstance().getCon();
 			ps = con.prepareStatement(sql);
 
-			ps.setString(1, ra);
-			
-			java.sql.Date ini = new java.sql.Date(inicio.getTime());
-			ps.setDate(2, ini);
+			ps.setInt(1, id_al);
 
+//			java.sql.Date ini = new java.sql.Date(inicio.getTime());
+//			ps.setDate(2, ini);
 
 			ps.executeUpdate();
 			exc = true;
@@ -305,11 +308,11 @@ public class AlunoDao implements IAlunoDao {
 
 		return exc;
 	}
-	
+
 	@Override
-	public boolean excluirEq(String ra, Date def) throws SQLException {
+	public boolean excluirEq(int id_eq) throws SQLException {
 		boolean exc = false;
-		String sql = "update infoAlunosEq set ativo = false where ra like ? and dtDeferimento like ?";
+		String sql = "update infoAlunosEq set ativo = false where id_eq = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
 
@@ -317,11 +320,10 @@ public class AlunoDao implements IAlunoDao {
 			con = DBResourceManager.getInstance().getCon();
 			ps = con.prepareStatement(sql);
 
-			ps.setString(1, ra);
-			
-			java.sql.Date d = new java.sql.Date(def.getTime());
-			ps.setDate(2, d);
+			ps.setInt(1, id_eq);
 
+//			java.sql.Date d = new java.sql.Date(def.getTime());
+//			ps.setDate(2, d);
 
 			ps.executeUpdate();
 			exc = true;
@@ -337,7 +339,7 @@ public class AlunoDao implements IAlunoDao {
 
 	@Override
 	public List<Aluno> pesquisarRa(String ra) throws SQLException {
-		
+
 		List<Aluno> alunos = new ArrayList<Aluno>();
 
 		Connection con = null;
@@ -351,13 +353,14 @@ public class AlunoDao implements IAlunoDao {
 			ps = con.prepareStatement(sql);
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-			ps.setString(1, ra);
+			ps.setString(1, ra+"%");
 
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
 				System.out.println("achou alguma coisa");
 				Aluno a = new Aluno();
+				a.setId_al(rs.getInt("id_al"));
 				a.setRa(ra);
 				a.setNome(rs.getString("nome"));
 				a.setEmail(rs.getString("email"));
@@ -393,7 +396,7 @@ public class AlunoDao implements IAlunoDao {
 				}
 
 				a.setCargaHoraria(rs.getInt("cargaHoraria"));
-				
+
 				alunos.add(a);
 
 			}
@@ -471,6 +474,7 @@ public class AlunoDao implements IAlunoDao {
 
 			if (rs.next()) {
 				System.out.println("achou alguma coisa");
+				eq.setId_eq(rs.getInt("id_eq"));
 				eq.setRa(rs.getString("ra"));
 				eq.setNome(rs.getString("nome"));
 				eq.setEmail(rs.getString("email"));
@@ -515,6 +519,7 @@ public class AlunoDao implements IAlunoDao {
 
 			while (rs.next()) {
 				Equivalencia eq = new Equivalencia();
+				eq.setId_eq(rs.getInt("id_eq"));
 				eq.setRa(rs.getString("ra"));
 				eq.setNome(rs.getString("nome"));
 				eq.setEmail(rs.getString("email"));
@@ -538,7 +543,7 @@ public class AlunoDao implements IAlunoDao {
 
 	@Override
 	public List<Equivalencia> pesquisarRaEq(String ra) throws SQLException {
-		
+
 		List<Equivalencia> equivalencias = new ArrayList<Equivalencia>();
 
 		Connection con = null;
@@ -551,14 +556,15 @@ public class AlunoDao implements IAlunoDao {
 			con = DBResourceManager.getInstance().getCon();
 			ps = con.prepareStatement(sql);
 
-			ps.setString(1, ra);
+			ps.setString(1, ra+"%");
 
 			rs = ps.executeQuery();
 
 			while (rs.next()) {
-				
+
 				Equivalencia eq = new Equivalencia();
 				System.out.println("achou alguma coisa");
+				eq.setId_eq(rs.getInt("id_eq"));
 				eq.setRa(ra);
 				eq.setNome(rs.getString("nome"));
 				eq.setEmail(rs.getString("email"));
@@ -567,9 +573,9 @@ public class AlunoDao implements IAlunoDao {
 				eq.setSenha(rs.getString("senha"));
 				eq.setDtDeferimento(rs.getDate("dtDeferimento"));
 				eq.setDeferido(rs.getBoolean("deferido"));
-				
+
 				equivalencias.add(eq);
-			} 
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -583,21 +589,22 @@ public class AlunoDao implements IAlunoDao {
 	@Override
 	public boolean editarEq(Equivalencia eq) throws SQLException {
 		boolean alt = false;
-		String sql = "update infoAlunosEq set nome = ?, email = ?, empresa = ?, id_curso = ?, deferido = ?, dtDeferimento = ? where ra like ?";
+		String sql = "update infoAlunosEq set ra = ?, nome = ?, email = ?, empresa = ?, id_curso = ?, deferido = ?, dtDeferimento = ? where id = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
 
 		try {
 			con = DBResourceManager.getInstance().getCon();
 			ps = con.prepareStatement(sql);
-			ps.setString(1, eq.getNome());
-			ps.setString(2, eq.getEmail());
-			ps.setString(3, eq.getEmpresa());
-			ps.setInt(4, eq.getId_curso());
-			ps.setBoolean(5, eq.isDeferido());
+			ps.setString(1, eq.getRa());
+			ps.setString(2, eq.getNome());
+			ps.setString(3, eq.getEmail());
+			ps.setString(4, eq.getEmpresa());
+			ps.setInt(5, eq.getId_curso());
+			ps.setBoolean(6, eq.isDeferido());
 			java.sql.Date inicio = new java.sql.Date(eq.getDtDeferimento().getTime());
-			ps.setDate(6, inicio);
-			ps.setString(7, eq.getRa());
+			ps.setDate(7, inicio);
+			ps.setInt(8, eq.getId_eq());
 
 			ps.executeUpdate();
 

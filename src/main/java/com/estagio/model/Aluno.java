@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Aluno {
 
+	int id_al;
 	int id_curso;
 	int cargaHoraria;
 	String ra;
@@ -39,6 +40,14 @@ public class Aluno {
 	String rel4;
 	
 	
+
+	public int getId_al() {
+		return id_al;
+	}
+
+	public void setId_al(int id_al) {
+		this.id_al = id_al;
+	}
 
 	public int getId_curso() {
 		return id_curso;

@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Equivalencia {
 
+	int id_eq;
 	int id_curso;
 	String ra;
 	String nome;
@@ -17,6 +18,15 @@ public class Equivalencia {
 	String dataDef;
 	
 	
+
+	
+	public int getId_eq() {
+		return id_eq;
+	}
+
+	public void setId_eq(int id_eq) {
+		this.id_eq = id_eq;
+	}
 
 	public String getRa() {
 		return ra;

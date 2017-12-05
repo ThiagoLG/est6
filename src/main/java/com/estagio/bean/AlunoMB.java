@@ -41,6 +41,7 @@ public class AlunoMB {
 	private Curso curso;
 	private List<Aluno> lstAlunos = new ArrayList<Aluno>();
 	private List<Curso> lstCursos = new ArrayList<Curso>();
+	private List<Curso> lstCursosEdit = new ArrayList<Curso>();
 	private List<Equivalencia> lstEquivalencia = new ArrayList<Equivalencia>();
 	private IAlunoDao alunoDao = new AlunoDao();
 	private String pesqNome;
@@ -171,7 +172,7 @@ public class AlunoMB {
 	public String adicionar() throws SQLException {
 		String pagina = "";
 
-		aluno.setId_curso(curso.getId_curso());
+//		aluno.setId_curso(curso.getId_curso());
 
 		if (validarDados()) {
 			if (alunoDao.estagioAtivo(aluno.getRa())) {
@@ -361,6 +362,14 @@ public class AlunoMB {
 
 	}
 
+	public void carregarCursosEdit(int id_curso) throws SQLException {
+		ICursoDao cursoDao = new CursoDao();
+		lstCursosEdit = cursoDao.listarCursos();
+
+		lstCursosEdit.add(0, lstCursosEdit.get(id_curso - 1));
+		lstCursosEdit.remove(id_curso);
+	}
+
 	public String editarAluno(Aluno a) {
 
 		aluno = a;
@@ -368,11 +377,25 @@ public class AlunoMB {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		a.setDtIni(sdf.format(a.getInicio()));
 
+		try {
+			carregarCursosEdit(a.getId_curso());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("nao carregou os cursos para o edit");
+		}
+
 		return "editarAluno?faces-redirect=true";
 	}
 
 	public String editarEquivalencia(Equivalencia eq) {
 		equivalencia = eq;
+		
+		try {
+			carregarCursosEdit(eq.getId_curso());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("nao carregou os cursos para o edit");
+		}
 
 		return "editarEquivalencia?faces-redirect=true";
 	}
@@ -442,7 +465,7 @@ public class AlunoMB {
 		String pagina = "";
 		IAlunoDao alunoDao = new AlunoDao();
 
-		if (alunoDao.excluir(aluno.getRa(), aluno.getInicio())) {
+		if (alunoDao.excluir(aluno.getId_al())) {
 			aluno = new Aluno();
 			equivalencia = new Equivalencia();
 			lstEquivalencia.clear();
@@ -457,7 +480,7 @@ public class AlunoMB {
 		String pagina = "";
 		IAlunoDao alunoDao = new AlunoDao();
 
-		if (alunoDao.excluirEq(equivalencia.getRa(), equivalencia.getDtDeferimento())) {
+		if (alunoDao.excluirEq(equivalencia.getId_eq())) {
 			aluno = new Aluno();
 			equivalencia = new Equivalencia();
 			lstEquivalencia.clear();
@@ -669,6 +692,7 @@ public class AlunoMB {
 		return ok;
 
 	}
+
 	// GET E SET
 
 	public String getImage() {
@@ -741,6 +765,14 @@ public class AlunoMB {
 
 	public void setLstCursos(List<Curso> lstCursos) {
 		this.lstCursos = lstCursos;
+	}
+
+	public List<Curso> getLstCursosEdit() {
+		return lstCursosEdit;
+	}
+
+	public void setLstCursosEdit(List<Curso> lstCursosEdit) {
+		this.lstCursosEdit = lstCursosEdit;
 	}
 
 	public List<Equivalencia> getLstEquivalencia() {

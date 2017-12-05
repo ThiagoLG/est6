@@ -8,7 +8,7 @@ public class LoginDao implements ILoginDao {
 
 	@Override
 	public boolean autenticarLogin(String ra, String senha) {
-		String sql = "SELECT * FROM infoAlunos WHERE ra like ? and senha like ?";
+		String sql = "SELECT * FROM infoAlunos WHERE ra like ? and senha like ? and ativo = true";
 		boolean autenticado = false;
 //		boolean aluno = true;
 		try {
@@ -32,7 +32,7 @@ public class LoginDao implements ILoginDao {
 
 	@Override
 	public boolean autenticarLoginEq(String ra, String senha) {
-		String sql = "SELECT * FROM infoAlunosEq WHERE ra like ? and senha like ?";
+		String sql = "SELECT * FROM infoAlunosEq WHERE ra like ? and senha like ? and ativo = true";
 		boolean autenticado = false;
 //		boolean aluno = true;
 		try {

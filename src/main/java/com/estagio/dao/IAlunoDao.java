@@ -1,7 +1,6 @@
 package com.estagio.dao;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 import com.estagio.model.Aluno;
@@ -23,9 +22,9 @@ public interface IAlunoDao {
 	
 	public boolean editar(Aluno a) throws SQLException;
 	
-	public boolean excluir(String ra, Date inicio) throws SQLException;
+	public boolean excluir(int id_al) throws SQLException;
 	
-	public boolean excluirEq(String ra, Date def) throws SQLException;
+	public boolean excluirEq(int id_eq) throws SQLException;
 
 	public List<Aluno> pesquisarRa (String ra) throws SQLException;
 	
