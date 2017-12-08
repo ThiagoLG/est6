@@ -36,6 +36,8 @@ public class Listener implements PhaseListener {
 		lstPaginasAdmin.add("/excluirAluno.xhtml");
 		lstPaginasAdmin.add("/visualizarAluno.xhtml");
 		lstPaginasAdmin.add("/visualizarEquivalencia.xhtml");
+		lstPaginasAdmin.add("/visualizarPendencia.xhtml");
+		lstPaginasAdmin.add("/relatoriosPendentes");
 
 		FacesContext fc = FacesContext.getCurrentInstance();
 		nomePagina = fc.getViewRoot().getViewId();

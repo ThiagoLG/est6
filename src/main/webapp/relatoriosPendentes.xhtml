@@ -67,36 +67,56 @@
 
 						<center>
 							<h1>
-								Alunos com relatórios pendentes para: <h:outputLabel value="#{alunoMB.mes}" />/<h:outputLabel value="#{alunoMB.ano}" />
+								Alunos com relatórios pendentes para:
+								<h:outputLabel value="#{alunoMB.mes}" />/<h:outputLabel value="#{alunoMB.ano}" />
 							</h1>
 						</center>
 
-						<p:dataTable value="#{alunoMB.lstPendentes}" var="aluno"
+						<p:dataTable id="tbl" value="#{alunoMB.lstPendentes}" var="aluno"
 							scrollable="true" scrollHeight="500">
 
-							<p:column headerText="RA">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="RA" />
+								</f:facet>
 								<h:outputText value="#{aluno.ra}" />
 							</p:column>
 
-
-							<p:column headerText="Nome">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Nome" />
+								</f:facet>
 								<h:outputText value="#{aluno.nome}" />
 							</p:column>
 
-							<p:column headerText="Email">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="E-mail" />
+								</f:facet>
 								<h:outputText value="#{aluno.email}" />
 							</p:column>
 
-							<p:column headerText="Data Limite">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Data Limite" />
+								</f:facet>
 								<h:outputText value="#{aluno.dtShow}" />
 							</p:column>
 
-							<p:column headerText="Visualizar">
+							<p:column exportable="false">
+								<f:facet name="header">
+									<h:outputText value="Visualizar" />
+								</f:facet>
 								<h:commandButton image="img/visu.png"
 									action="#{alunoMB.visualizarAluno (aluno)}" />
 							</p:column>
 
 						</p:dataTable>
+						<h:commandButton class="botao" value="Download">
+							<p:dataExporter type="pdf" target="tbl" fileName="#{alunoMB.nomeArquivo}"
+								preProcessor="#{alunoMB.preProcessPDF}" />
+
+						</h:commandButton>
 					</h:form>
 				</div>
 			</section>

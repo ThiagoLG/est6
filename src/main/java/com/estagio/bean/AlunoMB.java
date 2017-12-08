@@ -1,5 +1,7 @@
 package com.estagio.bean;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -27,6 +30,11 @@ import com.estagio.model.Administrador;
 import com.estagio.model.Aluno;
 import com.estagio.model.Curso;
 import com.estagio.model.Equivalencia;
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
 
 @ManagedBean
 @SessionScoped
@@ -51,6 +59,7 @@ public class AlunoMB {
 	private int totalHoras;
 	private String mes;
 	private String ano;
+	private String nomeArquivo;
 
 	// Campos de imagem
 	private String termoCompromisso;
@@ -75,17 +84,16 @@ public class AlunoMB {
 		equivalencia = new Equivalencia();
 		administrador = new Administrador();
 		curso = new Curso();
-		
-		//carregando campos de consulta de relatorios pendentes
+
+		// carregando campos de consulta de relatorios pendentes
 		Date d = new Date();
-		mes = Integer.toString(d.getMonth()+1);
-		ano = Integer.toString(d.getYear()+1900);
-		
-		
-		if(!mes.equals("10") && !mes.equals("11") && !mes.equals("12")){
-			mes = "0"+mes;
+		mes = Integer.toString(d.getMonth() + 1);
+		ano = Integer.toString(d.getYear() + 1900);
+
+		if (!mes.equals("10") && !mes.equals("11") && !mes.equals("12")) {
+			mes = "0" + mes;
 		}
-		
+
 		image = "";
 		try {
 			carregarCursos();
@@ -94,7 +102,7 @@ public class AlunoMB {
 			System.out.println("nao carregou os cursos");
 			e.printStackTrace();
 		}
-		
+
 		// image = "img/correct.png";
 		// image2 = "img/incorrect.png";
 	}
@@ -108,6 +116,7 @@ public class AlunoMB {
 	// context.setViewRoot(viewRoot);
 	// context.renderResponse();
 	// }
+
 
 	public String logar() throws SQLException {
 		String pagina = "";
@@ -516,10 +525,10 @@ public class AlunoMB {
 			e.printStackTrace();
 		}
 		datasLimite();
-		if(a.getDtShow() != null){
+		if (a.getDtShow() != null) {
 			pagina = "visualizarPendencia?faces-redirect=true";
 		}
-		
+
 		return pagina;
 	}
 
@@ -717,10 +726,12 @@ public class AlunoMB {
 		lstPendentes.clear();
 		AlunoDao dao = new AlunoDao();
 		String data = mes + "/" + ano;
+		
+		nomeArquivo = "relatorios-pendentes-"+mes+"_"+ano;
+		
 		if (ano.equals("")) {
 			FacesContext fc = FacesContext.getCurrentInstance();
-			fc.addMessage("formBody",
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Preencha o ano!", ""));
+			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_INFO, "Preencha o ano!", ""));
 
 		} else {
 			try {
@@ -760,7 +771,7 @@ public class AlunoMB {
 					} else if (r4.after(termino) || r4.equals(termino)) {
 						a.setRel4(sdf.format(termino));
 					}
-
+					
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -792,6 +803,17 @@ public class AlunoMB {
 			}
 		}
 	}
+	
+	public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
+        Document pdf = (Document) document;
+        pdf.open();
+        pdf.setPageSize(PageSize.A4);
+ 
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String logo = externalContext.getRealPath("") + File.separator + "img" + File.separator + "logoFatec.jpg";
+        pdf.add(Image.getInstance(logo));
+        System.out.println("passou por aqui");
+    }
 	// GET E SET
 
 	public String getImage() {
@@ -1049,5 +1071,15 @@ public class AlunoMB {
 	public void setAno(String ano) {
 		this.ano = ano;
 	}
+
+	public String getNomeArquivo() {
+		return nomeArquivo;
+	}
+
+	public void setNomeArquivo(String nomeArquivo) {
+		this.nomeArquivo = nomeArquivo;
+	}
+
+
 
 }
