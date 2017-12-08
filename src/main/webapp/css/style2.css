@@ -3,6 +3,7 @@ body {
 		rgba(0, 0, 0, 0.19);
 	font-family: Century Gothic;
 	background-color: #FFFFFF;
+	border-radius: 3px;
 }
 
 .container {
@@ -32,6 +33,7 @@ table#alter tr.dif td {
 	height: 30px;
 	padding: 2px;
 	border: 1px solid white;
+	border-radius: 7px;
 	position: relative;
 	top: 15%;
 	left: 80%;
@@ -44,6 +46,11 @@ header {
 	clear: left;
 	text-align: center;
 	font-size: 54px;
+	border-radius: 0px;
+}
+
+.fieldSet {
+	border-radius: 3px;
 }
 
 header a:link {
@@ -103,7 +110,7 @@ section #conteudo {
 	margin-right: 10%;
 	text-align: center;
 	margin: auto;
-	top: 30%;
+	top: 20%;
 	position: relative;
 }
 
@@ -113,7 +120,7 @@ section #conteudoConsulta {
 	margin-right: 10%;
 	text-align: center;
 	margin: auto;
-	top: 10%;
+	top: 8%;
 	position: relative;
 }
 
@@ -133,7 +140,7 @@ section #conteudo3 {
 	margin-left: 10%;
 	margin-right: 10%;
 	margin: auto;
-	top: 5%;
+	top: 2%;
 	text-align: center;
 	position: relative;
 }
@@ -148,7 +155,6 @@ table {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
-
 
 select {
 	width: 300px;
@@ -206,8 +212,8 @@ fieldset li {
 }
 
 .botao {
-	background-color: #000000;
-	border: none;
+	background: linear-gradient(#272727, #000000);
+	border: 2;
 	color: white;
 	padding: 15px 32px;
 	text-align: center;
@@ -216,6 +222,7 @@ fieldset li {
 	font-size: 16px;
 	font-weight: bold;
 	margin-bottom: 20px;
+	border-radius: 20px;
 }
 
 .botao2 {

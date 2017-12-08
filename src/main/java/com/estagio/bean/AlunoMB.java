@@ -43,11 +43,14 @@ public class AlunoMB {
 	private List<Curso> lstCursos = new ArrayList<Curso>();
 	private List<Curso> lstCursosEdit = new ArrayList<Curso>();
 	private List<Equivalencia> lstEquivalencia = new ArrayList<Equivalencia>();
+	private List<Aluno> lstPendentes = new ArrayList<Aluno>();
 	private IAlunoDao alunoDao = new AlunoDao();
 	private String pesqNome;
 	private String pesqRA;
 	private String opcPesquisa;
 	private int totalHoras;
+	private String mes;
+	private String ano;
 
 	// Campos de imagem
 	private String termoCompromisso;
@@ -64,13 +67,25 @@ public class AlunoMB {
 	private String termoContrato;
 	private String deferido;
 
+	@SuppressWarnings("deprecation")
 	@PostConstruct
 	public void inicializar() {
+		// iniciando classes
 		aluno = new Aluno();
 		equivalencia = new Equivalencia();
 		administrador = new Administrador();
 		curso = new Curso();
-
+		
+		//carregando campos de consulta de relatorios pendentes
+		Date d = new Date();
+		mes = Integer.toString(d.getMonth()+1);
+		ano = Integer.toString(d.getYear()+1900);
+		
+		
+		if(!mes.equals("10") && !mes.equals("11") && !mes.equals("12")){
+			mes = "0"+mes;
+		}
+		
 		image = "";
 		try {
 			carregarCursos();
@@ -79,7 +94,7 @@ public class AlunoMB {
 			System.out.println("nao carregou os cursos");
 			e.printStackTrace();
 		}
-
+		
 		// image = "img/correct.png";
 		// image2 = "img/incorrect.png";
 	}
@@ -172,7 +187,7 @@ public class AlunoMB {
 	public String adicionar() throws SQLException {
 		String pagina = "";
 
-//		aluno.setId_curso(curso.getId_curso());
+		// aluno.setId_curso(curso.getId_curso());
 
 		if (validarDados()) {
 			if (alunoDao.estagioAtivo(aluno.getRa())) {
@@ -389,7 +404,7 @@ public class AlunoMB {
 
 	public String editarEquivalencia(Equivalencia eq) {
 		equivalencia = eq;
-		
+
 		try {
 			carregarCursosEdit(eq.getId_curso());
 		} catch (SQLException e) {
@@ -492,6 +507,7 @@ public class AlunoMB {
 	}
 
 	public String visualizarAluno(Aluno a) {
+		String pagina = "visualizarAluno?faces-redirect=true";
 		aluno = a;
 		carregarImagens();
 		try {
@@ -500,7 +516,11 @@ public class AlunoMB {
 			e.printStackTrace();
 		}
 		datasLimite();
-		return "visualizarAluno?faces-redirect=true";
+		if(a.getDtShow() != null){
+			pagina = "visualizarPendencia?faces-redirect=true";
+		}
+		
+		return pagina;
 	}
 
 	public String visualizarEquivalencia(Equivalencia eq) {
@@ -693,6 +713,85 @@ public class AlunoMB {
 
 	}
 
+	public void pesquisarPendentes() {
+		lstPendentes.clear();
+		AlunoDao dao = new AlunoDao();
+		String data = mes + "/" + ano;
+		if (ano.equals("")) {
+			FacesContext fc = FacesContext.getCurrentInstance();
+			fc.addMessage("formBody",
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Preencha o ano!", ""));
+
+		} else {
+			try {
+				lstAlunos = dao.pesquisarNome("");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			for (Aluno a : lstAlunos) {
+
+				String re1 = a.getRel1();
+				String re2 = a.getRel2();
+				String re3 = a.getRel3();
+				String re4 = a.getRel4();
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+				try {
+					Date termino = a.getTermino();
+					Date r1 = sdf.parse(re1);
+					Date r2 = sdf.parse(re2);
+					Date r3 = sdf.parse(re3);
+					Date r4 = sdf.parse(re4);
+
+					if (r1.after(termino) || r1.equals(termino)) {
+						a.setRel1(sdf.format(termino));
+						a.setRel2("");
+						a.setRel3("");
+						a.setRel4("");
+
+					} else if (r2.after(termino) || r2.equals(termino)) {
+						a.setRel2(sdf.format(termino));
+						a.setRel3("");
+						a.setRel4("");
+					} else if (r3.after(termino) || r3.equals(termino)) {
+						a.setRel3(sdf.format(termino));
+						a.setRel4("");
+					} else if (r4.after(termino) || r4.equals(termino)) {
+						a.setRel4(sdf.format(termino));
+					}
+
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+
+				if (a.getRel1().contains(data) && a.isRelatorio1() == false) {
+					a.setDtShow(a.getRel1());
+					lstPendentes.add(a);
+				} else if (a.getRel2().contains(data) && a.isRelatorio2() == false) {
+					a.setDtShow(a.getRel2());
+					lstPendentes.add(a);
+				} else if (a.getRel3().contains(data) && a.isRelatorio3() == false) {
+					a.setDtShow(a.getRel3());
+					lstPendentes.add(a);
+				} else if (a.getRel4().contains(data) && a.isRelatorio4() == false) {
+					a.setDtShow(a.getRel4());
+					lstPendentes.add(a);
+				}
+			}
+
+			for (Aluno a : lstPendentes) {
+				System.out.println(a.getRa() + " - " + a.getNome() + " - " + a.getDtShow());
+			}
+
+			if (lstPendentes.isEmpty()) {
+				FacesContext fc = FacesContext.getCurrentInstance();
+				fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Nenhum aluno com relatório pendente para " + mes + "/" + ano, ""));
+
+			}
+		}
+	}
 	// GET E SET
 
 	public String getImage() {
@@ -781,6 +880,14 @@ public class AlunoMB {
 
 	public void setLstEquivalencia(List<Equivalencia> lstEquivalencia) {
 		this.lstEquivalencia = lstEquivalencia;
+	}
+
+	public List<Aluno> getLstPendentes() {
+		return lstPendentes;
+	}
+
+	public void setLstPendentes(List<Aluno> lstPendentes) {
+		this.lstPendentes = lstPendentes;
 	}
 
 	public IAlunoDao getAlunoDao() {
@@ -925,6 +1032,22 @@ public class AlunoMB {
 
 	public void setTotalHoras(int totalHoras) {
 		this.totalHoras = totalHoras;
+	}
+
+	public String getMes() {
+		return mes;
+	}
+
+	public void setMes(String mes) {
+		this.mes = mes;
+	}
+
+	public String getAno() {
+		return ano;
+	}
+
+	public void setAno(String ano) {
+		this.ano = ano;
 	}
 
 }

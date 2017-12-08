@@ -13,20 +13,18 @@
 	<h:form>
 		<div class="container">
 			<header id="header">
-				<a href="index.xhtml"> <img id="logonovo"
-					src="img/logo.png"></img></a>
+				<a href="index.xhtml"> <img id="logonovo" src="img/logo.png"></img></a>
 				<div id="restrita">
 					<h:outputLink value="areaAdmin.xhtml">
 						<f:verbatim>Menu</f:verbatim>
 					</h:outputLink>
-				</div>
-				<div id="restrita">
+					|
 					<p:commandLink actionListener="#{alunoMB.deslogar}">
 						<h:outputText value="Sair" />
 					</p:commandLink>
 				</div>
 			</header>
-			<section id="dadosAlunos">
+			<section id="pequeno">
 				<div id="conteudo3">
 					<h1>Informações sobre estágio</h1>
 					<h:form id="formBody">

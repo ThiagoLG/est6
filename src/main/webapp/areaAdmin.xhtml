@@ -13,40 +13,41 @@
 	<h:form>
 		<div class="container">
 			<header id="header">
-				<a href="index.xhtml"> <img id="logonovo"
-					src="img/logo.png"></img></a>
+				<a href="index.xhtml"> <img id="logonovo" src="img/logo.png"></img></a>
 				<div id="restrita">
 					<h:outputLink value="areaAdmin.xhtml">
 						<f:verbatim>Menu</f:verbatim>
 					</h:outputLink>
-				</div>
-				<div id="restrita">
+					|
 					<p:commandLink actionListener="#{alunoMB.deslogar}">
 						<h:outputText value="Sair" />
 					</p:commandLink>
 				</div>
 			</header>
 			<section id="pequena">
-				<div id="conteudo">	
+				<div id="conteudo">
 					<span class="lbl">Selecione uma opção:</span>
-					<fieldset>
+					<fieldset class="fieldSet">
 						<legend>Gerenciar</legend>
 						<ul>
-							<li><h:outputLink value="adicionarAluno.xhtml">
+							<li class="fieldSet"><h:outputLink value="adicionarAluno.xhtml">
 									<f:verbatim>Adicionar Estágio</f:verbatim>
 								</h:outputLink></li>
 
-							<li><h:outputLink value="adicionarEquivalencia.xhtml">
+							<li class="fieldSet"><h:outputLink value="adicionarEquivalencia.xhtml">
 									<f:verbatim>Adicionar Equivalência</f:verbatim>
 								</h:outputLink></li>
 
 						</ul>
 					</fieldset>
-					<fieldset>
-						<legend>Consultar</legend>
+					<fieldset class="fieldSet">
+						<legend >Consultar</legend>
 						<ul>
-							<li><h:outputLink value="consultarAluno.xhtml">
+							<li class="fieldSet"><h:outputLink value="consultarAluno.xhtml">
 									<f:verbatim>Consultar Aluno</f:verbatim>
+								</h:outputLink></li>
+							<li class="fieldSet"><h:outputLink value="relatoriosPendentes.xhtml">
+									<f:verbatim>Relatórios Pendentes</f:verbatim>
 								</h:outputLink></li>
 						</ul>
 					</fieldset>
