@@ -34,4 +34,12 @@ public interface IAlunoDao {
 	
 	public boolean estagioAtivo(String ra) throws SQLException;
 	
+	public boolean restaurarExcluido (int id_al) throws SQLException;
+	
+	public boolean restaurarExcluidoEq (int id_eq) throws SQLException;
+	
+	public List<Aluno> pesquisarNomeExc(String nome) throws SQLException;
+	
+	public List<Equivalencia> pesquisarNomeEqExc (String nome) throws SQLException;
+	
 }

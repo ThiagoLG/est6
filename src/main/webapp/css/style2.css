@@ -101,7 +101,7 @@ section {
 }
 
 #dadosAlunos {
-	height: 1500px;
+	height: 1560px;
 }
 
 section #conteudo {
@@ -110,7 +110,7 @@ section #conteudo {
 	margin-right: 10%;
 	text-align: center;
 	margin: auto;
-	top: 20%;
+	top: 10%;
 	position: relative;
 }
 

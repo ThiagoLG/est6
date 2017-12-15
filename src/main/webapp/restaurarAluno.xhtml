@@ -6,7 +6,7 @@
 <h:head>
 	<meta charset="UTF-8"></meta>
 	<link rel="SHORTCUT ICON" href="img/favicon.ico"></link>
-	<title>Estágios Fatec - Excluir Estágio</title>
+	<title>Estágios Fatec - Restaurar Estágio</title>
 	<link href="css/style2.css" rel="stylesheet"></link>
 </h:head>
 <h:body>
@@ -145,10 +145,10 @@
 						</table>
 						<table>
 							<tr>
-								<td><h:commandButton class="botao" value="Excluir"
-										action="#{alunoMB.salvarExc}" /></td>
+								<td><h:commandButton class="botao" value="Restaurar"
+										action="#{alunoMB.salvarRest}" /></td>
 								<td><h:commandButton class="botao" value="Cancelar"
-										action="#{alunoMB.redirectAdmin}" /></td>
+										action="restaurarAlunos?faces-redirect=true" /></td>
 							</tr>
 						</table>
 					</h:form>

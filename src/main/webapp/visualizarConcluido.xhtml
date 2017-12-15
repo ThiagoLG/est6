@@ -6,7 +6,7 @@
 <h:head>
 	<meta charset="UTF-8"></meta>
 	<link rel="SHORTCUT ICON" href="img/favicon.ico"></link>
-	<title>Estágios Fatec - Excluir Estágio</title>
+	<title>Estágios Fatec - Informações Estágio</title>
 	<link href="css/style2.css" rel="stylesheet"></link>
 </h:head>
 <h:body>
@@ -26,7 +26,7 @@
 			</header>
 			<section id="pequeno">
 				<div id="conteudo3">
-					<h1>Informações sobre estagiário(a)</h1>
+					<h1>Informações sobre estágio</h1>
 					<h:form id="formBody">
 						<p:messages id="messages" showDetail="true" autoUpdate="true"
 							closable="true" globalOnly="true" for="formBody" />
@@ -68,8 +68,8 @@
 										class="caixaTexto" readonly="true" /></td>
 							</tr>
 							<tr>
-								<td><span class="lbl">Carga Horária Semanal:</span></td>
-								<td><h:inputText value="#{alunoMB.aluno.cargaHoraria}"
+								<td><span class="lbl">Total de Horas:</span></td>
+								<td><h:inputText value="#{alunoMB.totalHoras}"
 										class="caixaTexto" readonly="true" /></td>
 							</tr>
 							<tr class="dif">
@@ -83,22 +83,30 @@
 										disabled="true" /></td>
 							</tr>
 							<tr class="dif">
-								<td><span class="lbl">Relatório 1:</span></td>
+								<td><span class="lbl">Relatório 1: <font size="3"
+										color="red"><h:outputLabel
+												value="#{alunoMB.aluno.rel1}" /></font></span></td>
 								<td><h:commandButton image="#{alunoMB.relatorio1}"
 										disabled="true" /></td>
 							</tr>
 							<tr>
-								<td><span class="lbl">Relatório 2:</span></td>
+								<td><span class="lbl">Relatório 2: <font size="3"
+										color="red"><h:outputLabel
+												value="#{alunoMB.aluno.rel2}" /></font></span></td>
 								<td><h:commandButton image="#{alunoMB.relatorio2}"
 										disabled="true" /></td>
 							</tr>
 							<tr class="dif">
-								<td><span class="lbl">Relatório 3:</span></td>
+								<td><span class="lbl">Relatório 3: <font size="3"
+										color="red"><h:outputLabel
+												value="#{alunoMB.aluno.rel3}" /></font></span></td>
 								<td><h:commandButton image="#{alunoMB.relatorio3}"
 										disabled="true" /></td>
 							</tr>
 							<tr>
-								<td><span class="lbl">Relatório 4:</span></td>
+								<td><span class="lbl">Relatório 4: <font size="3"
+										color="red"><h:outputLabel
+												value="#{alunoMB.aluno.rel4}" /></font></span></td>
 								<td><h:commandButton image="#{alunoMB.relatorio4}"
 										disabled="true" /></td>
 							</tr>
@@ -142,13 +150,12 @@
 								<td><h:inputText class="caixaTexto"
 										value="#{alunoMB.aluno.dtConc}" readonly="true" /></td>
 							</tr>
+
 						</table>
 						<table>
 							<tr>
-								<td><h:commandButton class="botao" value="Excluir"
-										action="#{alunoMB.salvarExc}" /></td>
-								<td><h:commandButton class="botao" value="Cancelar"
-										action="#{alunoMB.redirectAdmin}" /></td>
+								<td><h:commandButton class="botao" value="Voltar"
+										action="relatorioFinalizados?faces-redirect=true" /></td>
 							</tr>
 						</table>
 					</h:form>

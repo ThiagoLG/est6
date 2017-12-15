@@ -133,11 +133,20 @@
 										disabled="true" /></td>
 							</tr>
 							<tr>
-								<td><span class="lbl">Termo de contrato assinado:</span></td>
+								<td><span class="lbl">Convênio de concessão:</span></td>
 								<td><h:commandButton image="#{alunoMB.termoContrato}"
 										disabled="true" /></td>
 							</tr>
-
+							<tr>
+								<td><span class="lbl">Estágio concluído:</span></td>
+								<td><h:commandButton image="#{alunoMB.estagioConcluido}"
+										disabled="true" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Data da conclusão:</span></td>
+								<td><h:inputText class="caixaTexto"
+										value="#{alunoMB.aluno.dtConc}" readonly="true" /></td>
+							</tr>
 						</table>
 						<center>
 							<font size="3">Os relatórios sem data estipulada não são

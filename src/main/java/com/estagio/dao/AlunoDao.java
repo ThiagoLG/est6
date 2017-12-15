@@ -16,8 +16,8 @@ public class AlunoDao implements IAlunoDao {
 	@Override
 	public boolean adicionar(Aluno a) throws SQLException {
 		String sql = "Insert into infoAlunos (ra, nome, email, empresa, id_curso, senha, inicio, termino, termoCompromisso, planoAtividade,"
-				+ " relatorio1, relatorio2, relatorio3, relatorio4, termoAditivo, avAluno, avEmpresa, termoRecisao, termoRealizacao, termoContrato, ativo, obrigatorio, cargaHoraria)"
-				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " relatorio1, relatorio2, relatorio3, relatorio4, termoAditivo, avAluno, avEmpresa, termoRecisao, termoRealizacao, termoContrato, ativo, obrigatorio, cargaHoraria, concluido, dtConclusao)"
+				+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection con = null;
 		PreparedStatement ps = null;
 		boolean add = false;
@@ -59,6 +59,15 @@ public class AlunoDao implements IAlunoDao {
 			}
 
 			ps.setInt(23, a.getCargaHoraria());
+			ps.setBoolean(24, a.isConcluido());
+
+			try {
+				java.sql.Date dtConclusao = new java.sql.Date(a.getDtConclusao().getTime());
+				ps.setDate(25, dtConclusao);
+			} catch (Exception e) {
+				ps.setDate(25, null);
+			}
+
 			ps.executeUpdate();
 
 			add = true;
@@ -132,6 +141,14 @@ public class AlunoDao implements IAlunoDao {
 				}
 
 				a.setCargaHoraria(rs.getInt("cargaHoraria"));
+				a.setConcluido(rs.getBoolean("concluido"));
+				a.setDtConclusao(rs.getDate("dtConclusao"));
+
+				if (a.getDtConclusao() == null) {
+					a.setDtConc("Estágio não finalizado");
+				} else {
+					a.setDtConc(sdf.format(rs.getDate("dtConclusao")));
+				}
 
 				alunos.add(a);
 
@@ -206,6 +223,14 @@ public class AlunoDao implements IAlunoDao {
 				}
 
 				a.setCargaHoraria(rs.getInt("cargaHoraria"));
+				a.setConcluido(rs.getBoolean("concluido"));
+				a.setDtConclusao(rs.getDate("dtConclusao"));
+
+				if (a.getDtConclusao() == null) {
+					a.setDtConc("Estágio não finalizado");
+				} else {
+					a.setDtConc(sdf.format(rs.getDate("dtConclusao")));
+				}
 
 			} else {
 				a.setRa("");
@@ -226,10 +251,10 @@ public class AlunoDao implements IAlunoDao {
 		boolean alt = false;
 		String sql = "update infoAlunos set ra = ?, nome = ?, email = ?, empresa = ?, id_curso = ?, inicio = ?, termino = ?, termoCompromisso = ?,"
 				+ " planoAtividade = ?, relatorio1 = ?, relatorio2 = ?, relatorio3 = ?, relatorio4 = ?, termoAditivo = ?, avAluno = ?, avEmpresa = ?,"
-				+ " termoRecisao = ?, termoRealizacao = ?, termoContrato = ?, obrigatorio = ?, cargaHoraria = ? where id_al = ?";
+				+ " termoRecisao = ?, termoRealizacao = ?, termoContrato = ?, obrigatorio = ?, cargaHoraria = ?, concluido =?, dtConclusao = ? where id_al = ?";
 		Connection con = null;
 		PreparedStatement ps = null;
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
 			con = DBResourceManager.getInstance().getCon();
@@ -263,11 +288,19 @@ public class AlunoDao implements IAlunoDao {
 			}
 
 			ps.setInt(21, a.getCargaHoraria());
-			ps.setInt(22, a.getId_al());
+			ps.setBoolean(22, a.isConcluido());
 
-//			Date d = sdf.parse(a.getDtIni());
-//			java.sql.Date dtIni = new java.sql.Date(d.getTime());
-//			ps.setDate(22, dtIni);
+			try {
+				java.sql.Date dtConclusao = new java.sql.Date(a.getDtConclusao().getTime());
+				ps.setDate(23, dtConclusao);
+			} catch (Exception e) {
+				ps.setDate(23, null);
+			}
+			ps.setInt(24, a.getId_al());
+
+			// Date d = sdf.parse(a.getDtIni());
+			// java.sql.Date dtIni = new java.sql.Date(d.getTime());
+			// ps.setDate(22, dtIni);
 
 			ps.executeUpdate();
 
@@ -294,8 +327,8 @@ public class AlunoDao implements IAlunoDao {
 
 			ps.setInt(1, id_al);
 
-//			java.sql.Date ini = new java.sql.Date(inicio.getTime());
-//			ps.setDate(2, ini);
+			// java.sql.Date ini = new java.sql.Date(inicio.getTime());
+			// ps.setDate(2, ini);
 
 			ps.executeUpdate();
 			exc = true;
@@ -322,8 +355,8 @@ public class AlunoDao implements IAlunoDao {
 
 			ps.setInt(1, id_eq);
 
-//			java.sql.Date d = new java.sql.Date(def.getTime());
-//			ps.setDate(2, d);
+			// java.sql.Date d = new java.sql.Date(def.getTime());
+			// ps.setDate(2, d);
 
 			ps.executeUpdate();
 			exc = true;
@@ -353,7 +386,7 @@ public class AlunoDao implements IAlunoDao {
 			ps = con.prepareStatement(sql);
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-			ps.setString(1, ra+"%");
+			ps.setString(1, ra + "%");
 
 			rs = ps.executeQuery();
 
@@ -396,6 +429,14 @@ public class AlunoDao implements IAlunoDao {
 				}
 
 				a.setCargaHoraria(rs.getInt("cargaHoraria"));
+				a.setConcluido(rs.getBoolean("concluido"));
+				a.setDtConclusao(rs.getDate("dtConclusao"));
+
+				if (a.getDtConclusao() == null) {
+					a.setDtConc("Estágio não finalizado");
+				} else {
+					a.setDtConc(sdf.format(rs.getDate("dtConclusao")));
+				}
 
 				alunos.add(a);
 
@@ -556,7 +597,7 @@ public class AlunoDao implements IAlunoDao {
 			con = DBResourceManager.getInstance().getCon();
 			ps = con.prepareStatement(sql);
 
-			ps.setString(1, ra+"%");
+			ps.setString(1, ra + "%");
 
 			rs = ps.executeQuery();
 
@@ -649,6 +690,187 @@ public class AlunoDao implements IAlunoDao {
 		}
 
 		return ok;
+	}
+
+	
+	
+	@Override
+	public boolean restaurarExcluido(int id_al) throws SQLException {
+		boolean exc = false;
+		String sql = "update infoAlunos set ativo = true where id_al = ?";
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		try {
+			con = DBResourceManager.getInstance().getCon();
+			ps = con.prepareStatement(sql);
+
+			ps.setInt(1, id_al);
+
+			// java.sql.Date ini = new java.sql.Date(inicio.getTime());
+			// ps.setDate(2, ini);
+
+			ps.executeUpdate();
+			exc = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			ps.close();
+		}
+
+		return exc;
+	}
+	
+	@Override
+	public boolean restaurarExcluidoEq(int id_eq) throws SQLException {
+		boolean exc = false;
+		String sql = "update infoAlunosEq set ativo = true where id_eq = ?";
+		Connection con = null;
+		PreparedStatement ps = null;
+
+		try {
+			con = DBResourceManager.getInstance().getCon();
+			ps = con.prepareStatement(sql);
+
+			ps.setInt(1, id_eq);
+
+			// java.sql.Date d = new java.sql.Date(def.getTime());
+			// ps.setDate(2, d);
+
+			ps.executeUpdate();
+			exc = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			ps.close();
+		}
+
+		return exc;
+	}
+
+	
+	@Override
+	public List<Aluno> pesquisarNomeExc(String nome) throws SQLException {
+		List<Aluno> alunos = new ArrayList<Aluno>();
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+		String sql = "SELECT *, date_add(inicio, interval 182 day) as rel1, date_add(inicio, interval 365 day) as rel2, date_add(inicio, interval 547 day) as rel3, date_add(inicio, interval 730 day) as rel4 from infoAlunos where nome like ? and ativo=false order by nome";
+		try {
+
+			con = DBResourceManager.getInstance().getCon();
+			ps = con.prepareStatement(sql);
+
+			ps.setString(1, "%" + nome + "%");
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Aluno a = new Aluno();
+				a.setId_al(rs.getInt("id_al"));
+				a.setRa(rs.getString("ra"));
+				a.setNome(rs.getString("nome"));
+				a.setEmail(rs.getString("email"));
+				a.setEmpresa(rs.getString("empresa"));
+				a.setId_curso(rs.getInt("id_curso"));
+				a.setSenha(rs.getString("senha"));
+				a.setInicio(rs.getDate("inicio"));
+				a.setTermino(rs.getDate("termino"));
+				a.setDtIni(sdf.format(rs.getDate("inicio")));
+				a.setDtTer(sdf.format(rs.getDate("termino")));
+				a.setTermoCompromisso(rs.getBoolean("termoCompromisso"));
+				a.setPlanoAtividade(rs.getBoolean("planoAtividade"));
+				a.setRelatorio1(rs.getBoolean("relatorio1"));
+				a.setRelatorio2(rs.getBoolean("relatorio2"));
+				a.setRelatorio3(rs.getBoolean("relatorio3"));
+				a.setRelatorio4(rs.getBoolean("relatorio4"));
+				a.setTermoAditivo(rs.getBoolean("termoAditivo"));
+				a.setAvAluno(rs.getBoolean("avAluno"));
+				a.setAvEmpresa(rs.getBoolean("avEmpresa"));
+				a.setTermoRecisao(rs.getBoolean("termoRecisao"));
+				a.setTermoRealizacao(rs.getBoolean("termoRealizacao"));
+				a.setTermoContrato(rs.getBoolean("termoContrato"));
+				a.setObrigatorio(rs.getString("obrigatorio"));
+				a.setRel1(sdf.format(rs.getDate("rel1")));
+				a.setRel2(sdf.format(rs.getDate("rel2")));
+				a.setRel3(sdf.format(rs.getDate("rel3")));
+				a.setRel4(sdf.format(rs.getDate("rel4")));
+
+				if (a.getObrigatorio().equals("Sim")) {
+					a.setObg(true);
+				} else {
+					a.setObg(false);
+				}
+
+				a.setCargaHoraria(rs.getInt("cargaHoraria"));
+				a.setConcluido(rs.getBoolean("concluido"));
+				a.setDtConclusao(rs.getDate("dtConclusao"));
+
+				if (a.getDtConclusao() == null) {
+					a.setDtConc("Estágio não finalizado");
+				} else {
+					a.setDtConc(sdf.format(rs.getDate("dtConclusao")));
+				}
+
+				alunos.add(a);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			rs.close();
+			ps.close();
+		}
+
+		return alunos;
+	}
+
+
+	@Override
+	public List<Equivalencia> pesquisarNomeEqExc(String nome) throws SQLException {
+		List<Equivalencia> alunosEq = new ArrayList<Equivalencia>();
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+		String sql = "SELECT * from infoAlunosEq where nome like ? and ativo = false order by nome";
+		try {
+
+			con = DBResourceManager.getInstance().getCon();
+			ps = con.prepareStatement(sql);
+
+			ps.setString(1, "%" + nome + "%");
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Equivalencia eq = new Equivalencia();
+				eq.setId_eq(rs.getInt("id_eq"));
+				eq.setRa(rs.getString("ra"));
+				eq.setNome(rs.getString("nome"));
+				eq.setEmail(rs.getString("email"));
+				eq.setEmpresa(rs.getString("empresa"));
+				eq.setId_curso(rs.getInt("id_curso"));
+				eq.setDeferido(rs.getBoolean("deferido"));
+				eq.setDataDef(sdf.format(rs.getDate("dtDeferimento")));
+				eq.setDtDeferimento(rs.getDate("dtDeferimento"));
+				alunosEq.add(eq);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			rs.close();
+			ps.close();
+		}
+
+		return alunosEq;
 	}
 
 }

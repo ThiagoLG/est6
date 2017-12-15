@@ -35,6 +35,7 @@ import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
 
 @ManagedBean
 @SessionScoped
@@ -52,6 +53,7 @@ public class AlunoMB {
 	private List<Curso> lstCursosEdit = new ArrayList<Curso>();
 	private List<Equivalencia> lstEquivalencia = new ArrayList<Equivalencia>();
 	private List<Aluno> lstPendentes = new ArrayList<Aluno>();
+	private List<Aluno> lstConcluidos = new ArrayList<Aluno>();
 	private IAlunoDao alunoDao = new AlunoDao();
 	private String pesqNome;
 	private String pesqRA;
@@ -60,6 +62,9 @@ public class AlunoMB {
 	private String mes;
 	private String ano;
 	private String nomeArquivo;
+	private String semestre;
+	private int aux;
+	private String tituloRel;
 
 	// Campos de imagem
 	private String termoCompromisso;
@@ -75,6 +80,7 @@ public class AlunoMB {
 	private String termoRealizacao;
 	private String termoContrato;
 	private String deferido;
+	private String estagioConcluido;
 
 	@SuppressWarnings("deprecation")
 	@PostConstruct
@@ -84,6 +90,7 @@ public class AlunoMB {
 		equivalencia = new Equivalencia();
 		administrador = new Administrador();
 		curso = new Curso();
+		aux = 1;
 
 		// carregando campos de consulta de relatorios pendentes
 		Date d = new Date();
@@ -92,6 +99,12 @@ public class AlunoMB {
 
 		if (!mes.equals("10") && !mes.equals("11") && !mes.equals("12")) {
 			mes = "0" + mes;
+		}
+
+		if (Integer.parseInt(mes) > 7) {
+			semestre = "2";
+		} else {
+			semestre = "1";
 		}
 
 		image = "";
@@ -116,7 +129,6 @@ public class AlunoMB {
 	// context.setViewRoot(viewRoot);
 	// context.renderResponse();
 	// }
-
 
 	public String logar() throws SQLException {
 		String pagina = "";
@@ -341,6 +353,12 @@ public class AlunoMB {
 			termoContrato = "img/incorrect.png";
 		}
 
+		if (aluno.isConcluido()) {
+			estagioConcluido = "img/correct.png";
+		} else {
+			estagioConcluido = "img/incorrect.png";
+		}
+
 		System.out.println("carregou tudo!");
 
 	}
@@ -353,10 +371,23 @@ public class AlunoMB {
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_WARN, "Nenhum aluno encontrado",
 					"Confira o nome e tente novamente"));
+		} else {
+			aux = 1;
 		}
 
 	}
 
+	public void pesquisarNomeExc() throws SQLException {
+		lstAlunos = alunoDao.pesquisarNomeExc(pesqNome);
+		lstEquivalencia = alunoDao.pesquisarNomeEqExc(pesqNome);
+
+		if (lstEquivalencia.isEmpty() && lstAlunos.isEmpty()) {
+			FacesContext fc = FacesContext.getCurrentInstance();
+			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_WARN, "Nenhum aluno encontrado",
+					"Confira o nome e tente novamente"));
+		}
+	}
+	
 	public void pesquisarRA() throws SQLException {
 		// lstAlunos.clear();
 		// lstEquivalencia.clear();
@@ -377,6 +408,8 @@ public class AlunoMB {
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_WARN, "Nenhum aluno encontrado",
 					"Confira o RA e tente novamente"));
+		} else {
+			aux = 1;
 		}
 	}
 
@@ -398,8 +431,8 @@ public class AlunoMB {
 
 		aluno = a;
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		a.setDtIni(sdf.format(a.getInicio()));
+		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		// a.setDtIni(sdf.format(a.getInicio()));
 
 		try {
 			carregarCursosEdit(a.getId_curso());
@@ -436,6 +469,18 @@ public class AlunoMB {
 		return "excluirEquivalencia?faces-redirect=true";
 	}
 
+	public String restaurarAluno (Aluno a){
+		aluno = a;
+		carregarImagens();
+		return "restaurarAluno?faces-redirect=true";
+	}
+	
+	public String restaurarEquivalencia (Equivalencia eq){
+		equivalencia = eq;
+		carregarImagensEq();
+		return "restaurarEquivalencia?faces-redirect=true";
+	}
+	
 	public String redirectAdmin() {
 		lstAlunos.clear();
 		aluno = new Aluno();
@@ -515,18 +560,66 @@ public class AlunoMB {
 		return pagina;
 	}
 
+	public String salvarRest() throws SQLException{
+		String pagina = "";
+		IAlunoDao alunoDao = new AlunoDao();
+
+		if (alunoDao.restaurarExcluido(aluno.getId_al())) {
+			aluno = new Aluno();
+			equivalencia = new Equivalencia();
+			lstEquivalencia.clear();
+			lstAlunos.clear();
+			pagina = "restaurarAlunos?faces-redirect=true";
+		}
+
+		return pagina;
+	}
+
+	public String salvarRestEq() throws SQLException{
+		String pagina = "";
+		IAlunoDao alunoDao = new AlunoDao();
+
+		if (alunoDao.restaurarExcluidoEq(equivalencia.getId_eq())) {
+			aluno = new Aluno();
+			equivalencia = new Equivalencia();
+			lstEquivalencia.clear();
+			lstAlunos.clear();
+			pagina = "restaurarAlunos?faces-redirect=true";
+		}
+
+		return pagina;
+	}
+	
 	public String visualizarAluno(Aluno a) {
 		String pagina = "visualizarAluno?faces-redirect=true";
 		aluno = a;
 		carregarImagens();
-		try {
-			contarHoras(aluno);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		datasLimite();
-		if (a.getDtShow() != null) {
+
+		if (a.getDtIni() == null) {
+			pagina = "visualizarConcluidoEq?faces-redirect=true";
+		} else if (a.getDtShow() != null) {
 			pagina = "visualizarPendencia?faces-redirect=true";
+			try {
+				datasLimite();
+				contarHoras(aluno);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		} else if (aux == 0 && a.getDtIni() != null) {
+			pagina = "visualizarConcluido?faces-redirect=true";
+			try {
+				datasLimite();
+				contarHoras(aluno);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				datasLimite();
+				contarHoras(aluno);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return pagina;
@@ -726,9 +819,11 @@ public class AlunoMB {
 		lstPendentes.clear();
 		AlunoDao dao = new AlunoDao();
 		String data = mes + "/" + ano;
+
+		nomeArquivo = "relatorios-pendentes-" + mes + "_" + ano;
 		
-		nomeArquivo = "relatorios-pendentes-"+mes+"_"+ano;
-		
+		tituloRel = "Alunos com relatórios pendentes para o mês/ano: "+mes+"/"+ano;
+
 		if (ano.equals("")) {
 			FacesContext fc = FacesContext.getCurrentInstance();
 			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_INFO, "Preencha o ano!", ""));
@@ -771,7 +866,7 @@ public class AlunoMB {
 					} else if (r4.after(termino) || r4.equals(termino)) {
 						a.setRel4(sdf.format(termino));
 					}
-					
+
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -800,20 +895,135 @@ public class AlunoMB {
 				fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_INFO,
 						"Nenhum aluno com relatório pendente para " + mes + "/" + ano, ""));
 
+			} else {
+				aux = 1;
 			}
 		}
 	}
-	
+
+	public void pesquisarConcluidos() {
+		lstConcluidos.clear();
+		AlunoDao dao = new AlunoDao();
+
+		nomeArquivo = "estagios-concluidos-" + semestre + "_" + ano;
+		
+		tituloRel = "Alunos que concluiram estágio no semestre/ano: "+semestre+"/"+ano;
+
+		if (ano.equals("")) {
+			FacesContext fc = FacesContext.getCurrentInstance();
+			fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_INFO, "Preencha o ano!", ""));
+
+		} else {
+			try {
+				lstAlunos = dao.pesquisarNome("");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			for (Aluno a : lstAlunos) {
+
+				// String conc = a.getDtConc();
+				// SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+				if (a.getDtConc() != null) {
+					if (semestre.equals("1")) {
+						if (a.getDtConc().contains("01/" + ano) || a.getDtConc().contains("02/" + ano)
+								|| a.getDtConc().contains("03/" + ano) || a.getDtConc().contains("04/" + ano)
+								|| a.getDtConc().contains("05/" + ano) || a.getDtConc().contains("06/" + ano)
+								|| a.getDtConc().contains("07/" + ano)) {
+
+							lstConcluidos.add(a);
+
+						}
+					} else {
+						if (a.getDtConc().contains("08/" + ano) || a.getDtConc().contains("08/" + ano)
+								|| a.getDtConc().contains("10/" + ano) || a.getDtConc().contains("11/" + ano)
+								|| a.getDtConc().contains("12/" + ano)) {
+
+							lstConcluidos.add(a);
+
+						}
+					}
+				}
+			}
+
+			// CARREGAR OS ALUNOS FINALIZADOS POR EQUIVALÊNCIA
+			try {
+				lstEquivalencia = dao.pesquisarNomeEq("");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			for (Equivalencia eq : lstEquivalencia) {
+				if (eq.getDataDef() != null) {
+					if (semestre.equals("1")) {
+						if (eq.getDataDef().contains("01/" + ano) || eq.getDataDef().contains("02/" + ano)
+								|| eq.getDataDef().contains("03/" + ano) || eq.getDataDef().contains("04/" + ano)
+								|| eq.getDataDef().contains("05/" + ano) || eq.getDataDef().contains("06/" + ano)
+								|| eq.getDataDef().contains("07/" + ano)) {
+
+							Aluno a = new Aluno();
+							a.setRa(eq.getRa());
+							a.setNome(eq.getNome());
+							a.setEmail(eq.getEmail());
+							a.setEmpresa(eq.getEmpresa());
+							a.setConcluido(eq.isDeferido());
+							a.setDtConc(eq.getDataDef());
+							lstConcluidos.add(a);
+
+						}
+					} else {
+						if (eq.getDataDef().contains("08/" + ano) || eq.getDataDef().contains("09/" + ano)
+								|| eq.getDataDef().contains("10/" + ano) || eq.getDataDef().contains("11/" + ano)
+								|| eq.getDataDef().contains("12/" + ano)) {
+
+							Aluno a = new Aluno();
+							a.setRa(eq.getRa());
+							a.setNome(eq.getNome());
+							a.setEmail(eq.getEmail());
+							a.setEmpresa(eq.getEmpresa());
+							a.setConcluido(eq.isDeferido());
+							a.setDtConc(eq.getDataDef());
+							lstConcluidos.add(a);
+
+						}
+					}
+				}
+			}
+
+			// MOSTRAR LISTA
+			for (Aluno a : lstConcluidos) {
+				System.out.println(a.getRa() + " - " + a.getNome() + " - " + a.getDtConc());
+				System.out.println("Semestre " + semestre);
+			}
+
+			// MENSAGEM CASO NADA FOR ENCONTRADO
+			if (lstConcluidos.isEmpty()) {
+				FacesContext fc = FacesContext.getCurrentInstance();
+				fc.addMessage("formBody", new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Nenhum aluno concluiu o estágio supervisionado no semestre " + semestre + "/" + ano, ""));
+
+			} else {
+				aux = 0;
+			}
+		}
+	}
+
 	public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
-        Document pdf = (Document) document;
-        pdf.open();
-        pdf.setPageSize(PageSize.A4);
- 
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        String logo = externalContext.getRealPath("") + File.separator + "img" + File.separator + "logoFatec.jpg";
-        pdf.add(Image.getInstance(logo));
-        System.out.println("passou por aqui");
-    }
+		Document pdf = (Document) document;
+		pdf.open();
+		pdf.setPageSize(PageSize.A4);
+
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		String logo = externalContext.getRealPath("") + File.separator + "img" + File.separator + "logoFatec.jpg";
+		pdf.add(Image.getInstance(logo));
+
+		Paragraph p = new Paragraph(tituloRel+"\n\n");
+		p.setAlignment("center");
+		pdf.add(p);
+
+		System.out.println("passou por aqui");
+	}
 	// GET E SET
 
 	public String getImage() {
@@ -1080,6 +1290,44 @@ public class AlunoMB {
 		this.nomeArquivo = nomeArquivo;
 	}
 
+	public String getEstagioConcluido() {
+		return estagioConcluido;
+	}
 
+	public void setEstagioConcluido(String estagioConcluido) {
+		this.estagioConcluido = estagioConcluido;
+	}
+
+	public String getSemestre() {
+		return semestre;
+	}
+
+	public void setSemestre(String semestre) {
+		this.semestre = semestre;
+	}
+
+	public List<Aluno> getLstConcluidos() {
+		return lstConcluidos;
+	}
+
+	public void setLstConcluidos(List<Aluno> lstConcluidos) {
+		this.lstConcluidos = lstConcluidos;
+	}
+
+	public int getAux() {
+		return aux;
+	}
+
+	public void setAux(int aux) {
+		this.aux = aux;
+	}
+
+	public String getImgRel() {
+		return tituloRel;
+	}
+
+	public void setImgRel(String imgRel) {
+		this.tituloRel = imgRel;
+	}
 
 }

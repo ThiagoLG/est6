@@ -15,6 +15,7 @@ public class Aluno {
 	String obrigatorio;
 	Date inicio;
 	Date termino;
+	Date dtConclusao;
 	boolean termoCompromisso;
 	boolean planoAtividade;
 	boolean relatorio1;
@@ -27,9 +28,10 @@ public class Aluno {
 	boolean termoRecisao;
 	boolean termoRealizacao;
 	boolean termoContrato;
+	boolean concluido;
 
 	boolean obg;
-	
+
 	// Strings de exibi��o
 
 	String dtIni;
@@ -39,7 +41,7 @@ public class Aluno {
 	String rel3;
 	String rel4;
 	String dtShow;
-	
+	String dtConc;
 
 	public int getId_al() {
 		return id_al;
@@ -256,7 +258,7 @@ public class Aluno {
 	public void setRel4(String rel4) {
 		this.rel4 = rel4;
 	}
-	
+
 	public String getObrigatorio() {
 		return obrigatorio;
 	}
@@ -288,6 +290,29 @@ public class Aluno {
 	public void setDtShow(String dtShow) {
 		this.dtShow = dtShow;
 	}
-	
-	
+
+	public Date getDtConclusao() {
+		return dtConclusao;
+	}
+
+	public void setDtConclusao(Date dtConclusao) {
+		this.dtConclusao = dtConclusao;
+	}
+
+	public boolean isConcluido() {
+		return concluido;
+	}
+
+	public void setConcluido(boolean concluido) {
+		this.concluido = concluido;
+	}
+
+	public String getDtConc() {
+		return dtConc;
+	}
+
+	public void setDtConc(String dtConc) {
+		this.dtConc = dtConc;
+	}
+
 }

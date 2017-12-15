@@ -8,7 +8,7 @@
 	<meta charset="UTF-8"></meta>
 	<link rel="SHORTCUT ICON" href="img/favicon.ico"></link>
 	<link href="css/style2.css" rel="stylesheet"></link>
-	<title>Estágios Fatec - Relatórios Pendentes</title>
+	<title>Estágios Fatec - Alunos Finalizados</title>
 </h:head>
 <h:body>
 	<h:form>
@@ -33,21 +33,11 @@
 						<legend>Consulta</legend>
 						<table>
 							<tr>
-								<td class="etiqueta">Mês:</td>
+								<td class="etiqueta">Semestre:</td>
 								<td><h:selectOneMenu class="caixaTexto" id="cbbMes"
-										value="#{alunoMB.mes}" required="true" style="comboBox">
-										<f:selectItem itemLabel="1 - Janeiro" itemValue="01" />
-										<f:selectItem itemLabel="2 - Fevereiro" itemValue="02" />
-										<f:selectItem itemLabel="3 - Março" itemValue="03" />
-										<f:selectItem itemLabel="4 - Abril" itemValue="04" />
-										<f:selectItem itemLabel="5 - Maio" itemValue="05" />
-										<f:selectItem itemLabel="6 - Junho" itemValue="06" />
-										<f:selectItem itemLabel="7 - Julho" itemValue="07" />
-										<f:selectItem itemLabel="8 - Agosto" itemValue="08" />
-										<f:selectItem itemLabel="9 - Setembro" itemValue="09" />
-										<f:selectItem itemLabel="10 - Outubro" itemValue="10" />
-										<f:selectItem itemLabel="11 - Novembro" itemValue="11" />
-										<f:selectItem itemLabel="12 - Dezembro" itemValue="12" />
+										value="#{alunoMB.semestre}" required="true" style="comboBox">
+										<f:selectItem itemLabel="1º semestre" itemValue="1" />
+										<f:selectItem itemLabel="2º semestre" itemValue="2" />
 									</h:selectOneMenu></td>
 							</tr>
 							<tr>
@@ -59,7 +49,7 @@
 						<p></p>
 						<center>
 							<h:commandButton class="botao" value="Consultar"
-								action="#{alunoMB.pesquisarPendentes}" />
+								action="#{alunoMB.pesquisarConcluidos}" />
 						</center>
 					</fieldset>
 
@@ -67,12 +57,12 @@
 
 						<center>
 							<h1>
-								Alunos com relatórios pendentes para:
-								<h:outputLabel value="#{alunoMB.mes}" />/<h:outputLabel value="#{alunoMB.ano}" />
+								Alunos que finalizaram estágio no semestre:
+								<h:outputLabel value="#{alunoMB.semestre}" />/<h:outputLabel value="#{alunoMB.ano}" />
 							</h1>
 						</center>
 
-						<p:dataTable id="tbl" value="#{alunoMB.lstPendentes}" var="aluno"
+						<p:dataTable id="tbl" value="#{alunoMB.lstConcluidos}" var="aluno"
 							scrollable="true" scrollHeight="500">
 
 							<p:column>
@@ -98,9 +88,9 @@
 
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Data Limite" />
+									<h:outputText value="Data conclusão" />
 								</f:facet>
-								<h:outputText value="#{aluno.dtShow}" />
+								<h:outputText value="#{aluno.dtConc}" />
 							</p:column>
 
 							<p:column exportable="false">

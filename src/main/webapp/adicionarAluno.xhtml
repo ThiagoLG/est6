@@ -46,7 +46,7 @@
 		<div class="container">
 			<header id="header">
 				<a href="index.xhtml"> <img id="logonovo" src="img/logo.png"></img></a>
-								<div id="restrita">
+				<div id="restrita">
 					<h:outputLink value="areaAdmin.xhtml">
 						<f:verbatim>Menu</f:verbatim>
 					</h:outputLink>
@@ -184,11 +184,24 @@
 										value="#{alunoMB.aluno.termoRealizacao}" /></td>
 							</tr>
 							<tr>
-								<td><span class="lbl">Termo de contrato assinado:</span></td>
+								<td><span class="lbl">Convênio de concessão:</span></td>
 								<td><p:selectBooleanCheckbox
 										value="#{alunoMB.aluno.termoContrato}" /></td>
 							</tr>
-
+							<tr>
+								<td><span class="lbl">Estágio concluído:</span></td>
+								<td><p:selectBooleanCheckbox
+										value="#{alunoMB.aluno.concluido}" /></td>
+							</tr>
+							<tr class="dif">
+								<td><span class="lbl">Data da conclusão:</span></td>
+								<td><p:calendar showOn="button" navigator="true" size="15"
+										value="#{alunoMB.aluno.dtConclusao}" pattern="dd/MM/yyyy"
+										mask="99/99/9999" locale="pt">
+										<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+											timeZone="America/Sao_Paulo" />
+									</p:calendar></td>
+							</tr>
 						</table>
 						<table>
 							<tr>
