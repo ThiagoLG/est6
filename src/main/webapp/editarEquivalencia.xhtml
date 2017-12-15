@@ -13,9 +13,8 @@
 	<h:form>
 		<div class="container">
 			<header id="header">
-				<a href="index.xhtml"> <img id="logonovo"
-					src="img/logo.png"></img></a>
-								<div id="restrita">
+				<a href="index.xhtml"> <img id="logonovo" src="img/logo.png"></img></a>
+				<div id="restrita">
 					<h:outputLink value="areaAdmin.xhtml">
 						<f:verbatim>Menu</f:verbatim>
 					</h:outputLink>
@@ -74,9 +73,10 @@
 								<td><span class="lbl">Data de Deferimento:</span></td>
 								<td><p:calendar showOn="button" navigator="true" size="15"
 										requiredMessage="Campo Obrigatorio"
-										value="#{alunoMB.equivalencia.dtDeferimento}" pattern="dd/MM/yyyy"
-										mask="99/99/9999" locale="pt">
-										<f:convertDateTime pattern="dd/MM/yyyy"/>
+										value="#{alunoMB.equivalencia.dtDeferimento}"
+										pattern="dd/MM/yyyy" mask="99/99/9999" locale="pt">
+										<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"
+											timeZone="America/Sao_Paulo" />
 									</p:calendar></td>
 							</tr>
 						</table>

@@ -68,7 +68,8 @@
 										requiredMessage="Campo Obrigatorio"
 										value="#{alunoMB.aluno.inicio}" pattern="dd/MM/yyyy"
 										mask="99/99/9999" locale="pt">
-										<f:convertDateTime pattern="dd/MM/yyyy"/>
+										<f:convertDateTime pattern="dd/MM/yyyy"  locale="pt_BR"
+											timeZone="America/Sao_Paulo"/>
 									</p:calendar></td>
 							</tr>
 							<tr>
@@ -76,7 +77,8 @@
 								<td><p:calendar showOn="button" navigator="true" size="15"
 										value="#{alunoMB.aluno.termino}" pattern="dd/MM/yyyy"
 										mask="99/99/9999" locale="pt">
-										<f:convertDateTime pattern="dd/MM/yyyy"/>
+										<f:convertDateTime pattern="dd/MM/yyyy"  locale="pt_BR"
+											timeZone="America/Sao_Paulo"/>
 									</p:calendar></td>
 							</tr>
 							<tr class="dif">
